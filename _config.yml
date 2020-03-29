@@ -100,4 +100,4 @@ theme: landscape
 deploy:
   type: git
   repo: https://github.com/zhouatie/blog.git
-  branch: gh-pages
+  branch: master
