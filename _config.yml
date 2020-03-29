@@ -8,7 +8,7 @@ subtitle: remember everything
 description: 'about my front-end and my life'
 keywords:
 author: zhouatie
-language: cn
+language: zh-CN
 timezone: Asia/Shanghai
 
 # URL
@@ -58,7 +58,7 @@ highlight:
 # order_by: Posts order. (Order by date descending by default)
 index_generator:
   path: ''
-  per_page: 10
+  per_page: 5
   order_by: -date
 
 # Category & Tag
@@ -93,11 +93,11 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: icarus
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/zhouatie/blog.git
+  repo: git@github.com:zhouatie/blog.git
   branch: master
