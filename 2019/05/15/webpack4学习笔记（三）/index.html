@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 4.2.0" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>webpack4学习笔记（三） - atie&#39;s blog</title>
+
+
+    <meta name="description" content="前言这是我花了几个星期学习 webpack4 的学习笔记。内容不够细，因为一些相对比较简单的，就随意带过了。希望文章能给大家带来帮助。如有错误，希望及时指出。例子都在learn-webpack仓库上。如果你从中有所收获的话，希望你能给我的github点个star。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack4学习笔记（三）">
+<meta property="og:url" content="http://zhouatie.github.io/blog/2019/05/15/webpack4%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89/index.html">
+<meta property="og:site_name" content="atie&#39;s blog">
+<meta property="og:description" content="前言这是我花了几个星期学习 webpack4 的学习笔记。内容不够细，因为一些相对比较简单的，就随意带过了。希望文章能给大家带来帮助。如有错误，希望及时指出。例子都在learn-webpack仓库上。如果你从中有所收获的话，希望你能给我的github点个star。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/30/Geu0ns.png">
+<meta property="article:published_time" content="2019-05-14T17:28:10.000Z">
+<meta property="article:modified_time" content="2020-03-29T18:28:58.581Z">
+<meta property="article:author" content="zhouatie">
+<meta property="article:tag" content="webpack">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/03/30/Geu0ns.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/blog/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/blog/css/back-to-top.css">
+
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="/blog/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+<link rel="stylesheet" href="/blog/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/blog/">
+            
+                <img src="/blog/images/logo.svg" alt="webpack4学习笔记（三）" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/blog/">主页</a>
+                
+                <a class="navbar-item"
+                href="/blog/archives">归档</a>
+                
+                <a class="navbar-item"
+                href="/blog/categories">分类</a>
+                
+                <a class="navbar-item"
+                href="/blog/tags">标签</a>
+                
+                <a class="navbar-item"
+                href="/blog/about">关于</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    <a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/zhouatie">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-image">
+        <span  class="image is-7by1">
+            <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/Geu0ns.png" alt="webpack4学习笔记（三）">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2019-05-14T17:28:10.000Z">2019-05-15</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    28 分钟 读完 (大约 4153 个字)
+                </span>
+                
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span>次访问
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                webpack4学习笔记（三）
+            
+        </h1>
+        <div class="content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这是我花了几个星期学习 webpack4 的学习笔记。内容不够细，因为一些相对比较简单的，就随意带过了。希望文章能给大家带来帮助。如有错误，希望及时指出。例子都在<a href="https://github.com/zhouatie/learn-webpack">learn-webpack</a>仓库上。如果你从中有所收获的话，希望你能给我的<code>github</code>点个<code>star</code>。</p>
+<a id="more"></a>
+
+<h3 id="library"><a href="#library" class="headerlink" title="library"></a>library</h3><p>当你要开发第三方库供别人使用时，就需要用到<code>library</code>和<code>libraryTarget</code>这两个配置了。</p>
+<p><strong><code>library</code></strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">output: &#123;</span><br><span class="line">    filename: <span class="string">'library.js'</span>,</span><br><span class="line">    library: <span class="string">'library'</span>,</span><br><span class="line">    libraryTarget: <span class="string">'umd'</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<p><code>library</code>: 当配置了这个<code>library</code>参数后，会把<code>library</code>这个<code>key</code>对应的<code>value</code>即上面代码<code>library</code>挂载到全局作用域中。<code>html</code>用<code>script</code>标签引入，可以通过访问全局变量<code>library</code>访问到我们自己开发的库。</p>
+<p><code>libraryTarget</code>:这个默认值为<code>var</code>。意思就是让 library 定义的变量挂载到全局作用域下。当然还有浏览器环境的<code>window</code>,<code>node</code>环境的<code>global</code>,<code>umd</code>等。当设置了<code>window</code>、<code>global</code>,<code>library</code>就会挂载到这两个对象上。当配置了<code>umd</code>后，你就可以通过<code>import</code>,<code>require</code>等方式引入了。</p>
+<p><strong><code>externals</code></strong></p>
+<p><code>exterals</code>是开发公共库很重要的一个配置。当你的公共库引入了第三方库的时候，公共库会把该第三方库也打包进你的模块里。当使用者也引入了这个第三方库后，这个时候打包就会又打了一份第三方库进来。</p>
+<p>所在在公共模块库中配置如下代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">externals: &#123;</span><br><span class="line">    <span class="comment">// 前面的lodash是我的库里引入的包名 比如 import _ from 'lodash'</span></span><br><span class="line">    <span class="comment">// 后面的lodash是别人业务代码需要注入到他自己模块的lodash 比如 import lodash from 'lodash',注意不能import _ from 'lodash',因为配置项写了lodash 就不能import _</span></span><br><span class="line">    lodash: <span class="string">'lodash'</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<p><strong>前面的<code>lodash</code>是我的库里引入的包名 比如<code>import _ from &#39;lodash&#39;</code>,后面的<code>lodash</code>是别人业务代码需要注入到他自己模块的<code>lodash</code> 比如 <code>import lodash from &#39;lodash&#39;</code>,注意不能<code>import _ from &#39;lodash&#39;</code>,因为配置项写了<code>lodash</code> 就不能<code>import _</code>。</strong></p>
+<p>本人做了个试验，当自己开发的包不引入<code>lodash</code>,业务代码中也不引入<code>lodash</code>,那么打包业务代码的时候，<code>webpack</code>会把<code>lodash</code>打进你业务代码包里。</p>
+<p>当然<code>externals</code>,配置还有多种写法，如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">externals: &#123;</span><br><span class="line">    lodash: &#123;</span><br><span class="line">        commonjs: <span class="string">'lodash'</span>,</span><br><span class="line">        commonjs2: <span class="string">'lodash'</span>,</span><br><span class="line">        amd: <span class="string">'lodash'</span>,</span><br><span class="line">        root: <span class="string">'_'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">externals: [<span class="string">'lodash'</span>, <span class="string">'jquery'</span>]</span><br><span class="line"></span><br><span class="line">externals: <span class="string">'lodash'</span></span><br></pre></td></tr></table></figure>
+
+<p>具体请参考官网<a href="https://webpack.js.org/configuration/externals#externals">externals</a></p>
+<h3 id="发布自己开发的-npm-包"><a href="#发布自己开发的-npm-包" class="headerlink" title="发布自己开发的 npm 包"></a>发布自己开发的 npm 包</h3><p>学了上面的配置后，就需要学习下如何将自己的包发布到<code>npm</code>仓库上了。</p>
+<ul>
+<li><p><code>package.json</code> 的入口要改成<code>dist</code>目录下的 js 文件如： <code>&quot;main&quot;: &quot;./dist/library.js&quot;</code></p>
+</li>
+<li><p>注册 npm 账号。npm 会发送一份邮件到你的邮箱上，点击下里面的链接进行激活。</p>
+</li>
+<li><p>命令行输入<code>npm login</code> 进行登录，或者<code>npm adduser</code> 添加账号</p>
+</li>
+<li><p><code>npm publish</code></p>
+</li>
+</ul>
+<p>当出现如下提示代表发布成功</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 当出现类似如下代码时，表示你已经发布成功</span></span><br><span class="line">➜  library git:(master) ✗ npm publish</span><br><span class="line">+ atie-first-<span class="built_in">module</span>-library@<span class="number">1.0</span><span class="number">.0</span></span><br></pre></td></tr></table></figure>
+
+<p>遇到的问题：</p>
+<p>当你遇到<code>npm ERR! you must verify your email before publishing a new package</code>说明你还没有激活你的邮箱，去邮箱里点击下链接激活下就 ok 了</p>
+<p>当你已经登录了提醒<code>npm ERR! 404 unauthorized Login first</code>,这个时候你就要注意下你的<code>npm</code>源了，看看是否设置了淘宝源等。记得设置回来<code>npm config set registry https://registry.npmjs.org/</code></p>
+<h3 id="PWA"><a href="#PWA" class="headerlink" title="PWA"></a>PWA</h3><p>http-server</p>
+<p>workbox-webpack-plugin</p>
+<p>相信很多朋友都有耳闻过<code>PWA</code>这门技术,<code>PWA</code>是<code>Progressive Web App</code>的英文缩写， 翻译过来就是渐进式增强 WEB 应用， 是 Google 在 2016 年提出的概念，2017 年落地的 web 技术。目的就是在移动端利用提供的标准化框架，在网页应用中实现和原生应用相近的用户体验的渐进式网页应用。</p>
+<p>优点：</p>
+<ol>
+<li><strong>可靠</strong> 即使在不稳定的网络环境下，也能瞬间加载并展现</li>
+<li><strong>快</strong> 快速响应，并且 动画平滑流畅</li>
+</ol>
+<p>应用场景：</p>
+<p>当你访问正常运行的服务器页面的时候，页面正常加载。可当你服务器挂了的时候，页面就无法正常加载了。</p>
+<p>这个时候就需要使用到 pwa 技术了。</p>
+<p>这里我编写最简单的代码重现下场景：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    mode: <span class="string">'production'</span>,</span><br><span class="line">    entry: <span class="string">'./index.js'</span>,</span><br><span class="line">    output: &#123;</span><br><span class="line">        filename: <span class="string">'bundle.js'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> CleanWebpackPlugin(),</span><br><span class="line">        <span class="keyword">new</span> HtmlWebpackPlugin()</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'this is outer console'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// package.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"name"</span>: <span class="string">"PWA"</span>,</span><br><span class="line">  <span class="string">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="string">"description"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="string">"main"</span>: <span class="string">"index.js"</span>,</span><br><span class="line">  <span class="string">"scripts"</span>: &#123;</span><br><span class="line">    <span class="string">"build"</span>: <span class="string">"webpack --config webpack.config.js"</span>,</span><br><span class="line">    <span class="string">"start"</span>: <span class="string">"http-server ./dist"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"keywords"</span>: [],</span><br><span class="line">  <span class="string">"author"</span>: <span class="string">""</span>,</span><br><span class="line">  <span class="string">"license"</span>: <span class="string">"ISC"</span>,</span><br><span class="line">  <span class="string">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="string">"clean-webpack-plugin"</span>: <span class="string">"^2.0.1"</span>,</span><br><span class="line">    <span class="string">"html-webpack-plugin"</span>: <span class="string">"^3.2.0"</span>,</span><br><span class="line">    <span class="string">"http-server"</span>: <span class="string">"^0.11.1"</span>,</span><br><span class="line">    <span class="string">"webpack"</span>: <span class="string">"^4.30.0"</span>,</span><br><span class="line">    <span class="string">"webpack-cli"</span>: <span class="string">"^3.3.1"</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行下<code>npm run build</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── bundle.js</span><br><span class="line">└── index.html</span><br></pre></td></tr></table></figure>
+
+<p>为了模拟服务器环境，我们安装下<code>http-server</code></p>
+<p><code>npm i http-server -D</code></p>
+<p>配置下<code>package.json</code>，<code>&quot;start&quot;: &quot;http-server ./dist&quot;</code></p>
+<p>执行<code>npm run start</code>来启动 dist 文件夹下的页面</p>
+<p>这个时候控制台会正常打印出<code>&#39;this is outer console&#39;</code></p>
+<p>当我们断开<code>http-server</code>服务后，在访问该页面时，页面就报 404 了</p>
+<p>这个时候就需要使用到 pwa 技术了</p>
+<p>使用步骤：</p>
+<p>安装： <code>npm i workbox-webpack-plugin -D</code></p>
+<p>webpack 配置文件配置：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">const</span> &#123; GenerateSW &#125; = <span class="built_in">require</span>(<span class="string">'workbox-webpack-plugin'</span>);</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">	mode: <span class="string">'production'</span>,</span><br><span class="line">	entry: <span class="string">'./index.js'</span>,</span><br><span class="line">	output: &#123;</span><br><span class="line">		filename: <span class="string">'bundle.js'</span></span><br><span class="line">	&#125;,</span><br><span class="line">	plugins: [</span><br><span class="line">		<span class="keyword">new</span> CleanWebpackPlugin(),</span><br><span class="line">		<span class="keyword">new</span> HtmlWebpackPlugin(),</span><br><span class="line">		<span class="keyword">new</span> GenerateSW(&#123;</span><br><span class="line">			skipWaiting: <span class="literal">true</span>, <span class="comment">// 强制等待中的 Service Worker 被激活</span></span><br><span class="line">			clientsClaim: <span class="literal">true</span> <span class="comment">// Service Worker 被激活后使其立即获得页面控制权</span></span><br><span class="line">		&#125;)</span><br><span class="line">	]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这里我们写一个最简单的业务代码，在注册完 pwa 之后打印下内容：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'this is outer console'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 进行 service-wroker 注册</span></span><br><span class="line"><span class="keyword">if</span> (<span class="string">'serviceWorker'</span> <span class="keyword">in</span> navigator) &#123;</span><br><span class="line">	<span class="built_in">window</span>.addEventListener(<span class="string">'load'</span>, () =&gt; &#123;</span><br><span class="line">		navigator.serviceWorker</span><br><span class="line">			.register(<span class="string">'./service-worker.js'</span>)</span><br><span class="line">			.then(<span class="function"><span class="params">registration</span> =&gt;</span> &#123;</span><br><span class="line">				<span class="built_in">console</span>.log(<span class="string">'====== this is inner console ======'</span>);</span><br><span class="line">				<span class="built_in">console</span>.log(<span class="string">'SW registered: '</span>, registration);</span><br><span class="line">			&#125;)</span><br><span class="line">			.catch(<span class="function"><span class="params">registrationError</span> =&gt;</span> &#123;</span><br><span class="line">				<span class="built_in">console</span>.log(<span class="string">'SW registration failed: '</span>, registrationError);</span><br><span class="line">			&#125;);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行下打包命令：<code>npm run build</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── bundle.js</span><br><span class="line">├── index.html</span><br><span class="line">├── precache-manifest.e21ef01e9492a8310f54438fcd8b1aad.js</span><br><span class="line">└── service-worker.js</span><br></pre></td></tr></table></figure>
+
+<p>打包之后会生成个<code>service-worker.js</code>与<code>precache-manifest.e21ef01e9492a8310f54438fcd8b1aad.js</code></p>
+<p>接下来再重启下<code>http-server</code>服务：<code>npm run start</code></p>
+<p>页面将会打印出</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span> is outer <span class="built_in">console</span></span><br><span class="line">====== <span class="keyword">this</span> is inner <span class="built_in">console</span> ======</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>然后我们再断开<code>http-server</code>服务</p>
+<p>刷新下页面，竟然打印出了相同的代码。说明 pwa 离线缓存成功。</p>
+<h3 id="typescript"><a href="#typescript" class="headerlink" title="typescript"></a>typescript</h3><p>使用 webpack 打包 ts 文件，就需要安装<code>ts-loader</code></p>
+<p>安装：<code>npm i ts-loader typescript -D</code></p>
+<p><code>webpack.config.js</code>文件中添加解析<code>typescript</code>代码的<code>loader</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">	mode: <span class="string">'production'</span>,</span><br><span class="line">	entry: <span class="string">'./src/index.ts'</span>,</span><br><span class="line">	output: &#123;</span><br><span class="line">		filename: <span class="string">'bundle.js'</span></span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="built_in">module</span>: &#123;</span><br><span class="line">		rules: [</span><br><span class="line">			&#123;</span><br><span class="line">				test: <span class="regexp">/\.ts$/</span>,</span><br><span class="line">				loader: <span class="string">'ts-loader'</span>,</span><br><span class="line">				exclude: <span class="regexp">/node_modules/</span></span><br><span class="line">			&#125;</span><br><span class="line">		]</span><br><span class="line">	&#125;,</span><br><span class="line">	plugins: [<span class="keyword">new</span> CleanWebpackPlugin(), <span class="keyword">new</span> HtmlWebpackPlugin()]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>配置了<code>webpack.config.js</code>还不行，还得在根目录文件下新增个<code>.tsconfig.json</code>文件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"compilerOptions"</span>: &#123;</span><br><span class="line">        <span class="string">"outDir"</span>: <span class="string">"./dist/"</span>, <span class="comment">// 默认解析后的文件输出位置</span></span><br><span class="line">        <span class="string">"noImplicitAny"</span>: <span class="literal">true</span>, <span class="comment">// 存在隐式 any 时抛错</span></span><br><span class="line">        <span class="string">"module"</span>: <span class="string">"es6"</span>, <span class="comment">// 表示这是一个es6模块机制</span></span><br><span class="line">        <span class="string">"target"</span>: <span class="string">"es5"</span>, <span class="comment">// 表示要讲ts代码转成es5代码</span></span><br><span class="line">        <span class="string">"allowJs"</span>: <span class="literal">true</span> <span class="comment">// 表示允许引入js文件。TS 文件指拓展名为 .ts、.tsx 或 .d.ts 的文件。如果开启了 allowJs 选项，那 .js 和 .jsx 文件也属于 TS 文件</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>新建<code>index.ts</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Greeter</span> </span>&#123;</span><br><span class="line">	greeting: string;</span><br><span class="line">	<span class="keyword">constructor</span>(message: string) &#123;</span><br><span class="line">		<span class="keyword">this</span>.greeting = message;</span><br><span class="line">	&#125;</span><br><span class="line">	greet() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">'Hello, '</span> + <span class="keyword">this</span>.greeting;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> greeter = <span class="keyword">new</span> Greeter(<span class="string">'world'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> button = <span class="built_in">document</span>.createElement(<span class="string">'button'</span>);</span><br><span class="line">button.textContent = <span class="string">'Say Hello'</span>;</span><br><span class="line">button.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	alert(greeter.greet());</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.body.appendChild(button);</span><br></pre></td></tr></table></figure>
+
+<p>执行打包命令，访问打包后的页面，页面正常执行。</p>
+<p>当需要使用<code>lodash</code>等库时，</p>
+<p>需安装：<code>npm i @types/lodash -D</code></p>
+<p>修改页面代码 引入 <code>lodash</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> _ <span class="keyword">from</span> <span class="string">'lodash'</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Greeter</span> </span>&#123;</span><br><span class="line">	greeting: string;</span><br><span class="line">	<span class="keyword">constructor</span>(message: string) &#123;</span><br><span class="line">		<span class="keyword">this</span>.greeting = message;</span><br><span class="line">	&#125;</span><br><span class="line">	greet() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">'Hello, '</span> + <span class="keyword">this</span>.greeting;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> greeter = <span class="keyword">new</span> Greeter(<span class="string">'world'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> button = <span class="built_in">document</span>.createElement(<span class="string">'button'</span>);</span><br><span class="line">button.textContent = <span class="string">'Say Hello'</span>;</span><br><span class="line">button.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	alert(_.join([<span class="string">'lodash'</span>, greeter.greet()], <span class="string">'-'</span>));</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.body.appendChild(button);</span><br></pre></td></tr></table></figure>
+
+<p><strong>提醒：ts 使用的包，可通过<code>https://microsoft.github.io/TypeSearch</code> 这个网址去查对应的包使用指南</strong></p>
+<h3 id="使用WebpackDevServer实现请求转发"><a href="#使用WebpackDevServer实现请求转发" class="headerlink" title="使用WebpackDevServer实现请求转发"></a>使用<code>WebpackDevServer</code>实现请求转发</h3><p>当我们工作本地开发某一个需求的时候，需要将这块需求的请求地址转发到某个后端同事的本地服务器或某个服务器上，就需要用到代理。然后其他页面的请求都走测试环境的请求。那么我们该怎样拦截某个请求，并将其转发到我们想要转发的接口上呢？</p>
+<p>这个时候就需要用到<code>webpack-dev-server</code></p>
+<p>主要看<code>devServer</code>配置：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>);</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">	mode: <span class="string">'development'</span>,</span><br><span class="line">	entry: <span class="string">'./index.js'</span>,</span><br><span class="line">	output: &#123;</span><br><span class="line">		filename: <span class="string">'bundle.js'</span></span><br><span class="line">	&#125;,</span><br><span class="line">	devServer: &#123;</span><br><span class="line">		contentBase: <span class="string">'./dist'</span>,</span><br><span class="line">		open: <span class="literal">true</span>,</span><br><span class="line">		hot: <span class="literal">true</span></span><br><span class="line">	&#125;,</span><br><span class="line">	plugins: [<span class="keyword">new</span> HtmlWebpackPlugin(), <span class="keyword">new</span> CleanWebpackPlugin()]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// package.json</span></span><br><span class="line"></span><br><span class="line">scripts: &#123;</span><br><span class="line">  <span class="string">"server"</span>: <span class="string">"webpack-dev-server"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> div = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">div.innerHTML = <span class="string">'hahahha'</span>;</span><br><span class="line">div.addEventListener(<span class="string">'click'</span>, () =&gt; &#123;</span><br><span class="line">	alert(<span class="string">'hahah'</span>);</span><br><span class="line">	axios.get(<span class="string">'/list'</span>).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">		<span class="built_in">console</span>.log(res);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.body.appendChild(div);</span><br></pre></td></tr></table></figure>
+
+<p>在写一个本地启动的服务端代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">'/api/list'</span>, (req, res) =&gt; &#123;</span><br><span class="line">	res.json(&#123;</span><br><span class="line">		success: <span class="literal">true</span></span><br><span class="line">	&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">8888</span>, () =&gt; &#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'listening localhost:8888'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>执行<code>npm run server</code>命令，浏览器会自动打开页面。点击 div 后，会发起请求。</p>
+<p>浏览器提示<code>http://localhost:8080/api/list 404 (Not Found)</code>,表示该接口不存在。</p>
+<p>因为我们<code>webpack</code>启动静态资源服务器默认端口为 8080，所以他求会直接请求到 8080 的/api/list 接口。所以会提示找不到该接口。</p>
+<p>为了解决这个问题，我们就需要将该请求从 8080 端口代理到 8888 端口(也就是我们自己本地启动的服务)</p>
+<p>配置<code>webpack.config.js</code></p>
+<p>这里我只展示<code>devServer</code>代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line">devServer: &#123;</span><br><span class="line">    contentBase: <span class="string">'./dist'</span>,</span><br><span class="line">    open: <span class="literal">true</span>,</span><br><span class="line">    hot: <span class="literal">true</span>,</span><br><span class="line">    proxy: &#123;</span><br><span class="line">        <span class="string">'/api'</span>: &#123;</span><br><span class="line">            target: <span class="string">'http://localhost:8888'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<p>配置<code>devServer</code>的<code>proxy</code>字段的参数，将请求<code>/api</code>开头的请求都转发到<code>http://localhost:8888</code>,</p>
+<p>通过这个方法可以解决一开始提到的本地开发的时候，只想把部分接口转发到某台部署新需求的服务器上。比如当你这个项目请求很多，不同接口部署在不同的端口或者不同的服务器上。那么就可以通过配置<strong>第一个路径</strong>，来区分不同的模块。并转发到不同的服务上。如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line">devServer: &#123;</span><br><span class="line">    contentBase: <span class="string">'./dist'</span>,</span><br><span class="line">    open: <span class="literal">true</span>,</span><br><span class="line">    hot: <span class="literal">true</span>,</span><br><span class="line">    proxy: &#123;</span><br><span class="line">        <span class="string">'/module1'</span>: &#123;</span><br><span class="line">            target: <span class="string">'http://localhost:8887'</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'/module2'</span>: &#123;</span><br><span class="line">            target: <span class="string">'http://localhost:8888'</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'/module3'</span>: &#123;</span><br><span class="line">            target: <span class="string">'http://localhost:8889'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<p>当你要代理到某个 https 的接口上，就需要设置<code>secure: false</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line">devServer: &#123;</span><br><span class="line">    proxy: &#123;</span><br><span class="line">        <span class="string">'/api'</span>: &#123;</span><br><span class="line">            target: <span class="string">'https://other-server.example.com'</span>,</span><br><span class="line">            secure: <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">target: <span class="string">''</span>， <span class="comment">// 代理的目标地址</span></span><br><span class="line">secure: <span class="literal">false</span>, <span class="comment">// 请求https的需要设置</span></span><br><span class="line">changeOrigin: <span class="literal">true</span>,  <span class="comment">// 跨域的时候需要设置</span></span><br><span class="line">headers: &#123;</span><br><span class="line">  host: <span class="string">'http://www.baidu.com'</span>, <span class="comment">//修改请求域名</span></span><br><span class="line">  cookie: <span class="string">''</span></span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>其他关于<code>devServer</code>的配置详见<a href="https://webpack.js.org/configuration/dev-server#devserverproxy">devServer</a></p>
+<h3 id="WebpackDevServer-解决单页面路由-404-问题"><a href="#WebpackDevServer-解决单页面路由-404-问题" class="headerlink" title="WebpackDevServer 解决单页面路由 404 问题"></a>WebpackDevServer 解决单页面路由 404 问题</h3><p>相信大家都是开发过 vue 或者 react 单页面带路由的应用。这里就忽略业务代码，介绍下<code>devServer</code>的<code>historyApiFallback</code>参数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">devServer: &#123;</span><br><span class="line">  historyApiFallback: <span class="literal">true</span>, <span class="comment">// 当设置为true时，切换路由就不会出现路由404的问题了</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>详见<a href="https://webpack.js.org/configuration/dev-server#devserverhistoryapifallback">historyApiFallback</a></p>
+<h3 id="eslint"><a href="#eslint" class="headerlink" title="eslint"></a>eslint</h3><p>安装<code>eslint</code>: <code>npm i eslint -D</code></p>
+<p>目录下新建<code>.eslintrc.json</code>文件。</p>
+<p><code>environment</code>: 指定脚本的运行环境</p>
+<p><code>globals</code>: 脚本在执行期间访问的额外全局变量。</p>
+<p><code>rules</code>: 启动的规则及其各自的错误级别。</p>
+<p><code>解析器选项</code>: 解析器选项</p>
+<p>编辑你的<code>eslint</code>的规则</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"parserOptions"</span>: &#123;</span><br><span class="line">        <span class="string">"ecmaVersion"</span>: <span class="number">6</span>,</span><br><span class="line">        <span class="string">"sourceType"</span>: <span class="string">"module"</span>,</span><br><span class="line">        <span class="string">"ecmaFeatures"</span>: &#123;</span><br><span class="line">            <span class="string">"jsx"</span>: <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"rules"</span>: &#123;</span><br><span class="line">        <span class="string">"semi"</span>: <span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>vscode</code>安装<code>eslint</code>插件。</p>
+<p>配置下<code>webpack.config.js</code>配置。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">devServer: &#123;</span><br><span class="line">    overlay: <span class="literal">true</span>,</span><br><span class="line">    contentBase: <span class="string">'./dist'</span>,</span><br><span class="line">    hot: <span class="literal">true</span>,</span><br><span class="line">    open: <span class="literal">true</span></span><br><span class="line">&#125;,</span><br><span class="line"><span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [&#123;</span><br><span class="line">        test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">      	exclude: <span class="regexp">/node_modules/</span>,</span><br><span class="line">        use: [<span class="string">'eslint-loader'</span>]</span><br><span class="line">    &#125;]</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p><code>eslint-loader</code>是用于检查<code>js</code>代码是否符合<code>eslint</code>规则。</p>
+<p>这里<code>devServer</code>中的<code>overlay</code>的作用是，当你 eslint 报错的时候，页面会有个报错蒙层。这样就不局限于编辑器（vscode)的报错提醒了。</p>
+<p>如果 js 代码使用了多个 loader，那么 eslint-loader 一定要写在最右边。如果不写在最后一个的话，需在里面添加<code>enforce: &quot;pre&quot;</code>,这样不管写在哪个位置都会优先使用<code>eslint-loader</code>校验下代码规范。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    loader: <span class="string">'eslint-loader'</span>,</span><br><span class="line">    options: &#123;</span><br><span class="line">        enforce: <span class="string">"pre"</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="提升webpack打包速度的方法"><a href="#提升webpack打包速度的方法" class="headerlink" title="提升webpack打包速度的方法"></a>提升<code>webpack</code>打包速度的方法</h3><h4 id="1-跟上技术的迭代"><a href="#1-跟上技术的迭代" class="headerlink" title="1. 跟上技术的迭代"></a>1. 跟上技术的迭代</h4><ul>
+<li>升级<code>webpack</code>版本 <code>node</code>版本<code>npm</code>等版本</li>
+</ul>
+<h4 id="2-尽可能少的模块上应用loader"><a href="#2-尽可能少的模块上应用loader" class="headerlink" title="2. 尽可能少的模块上应用loader"></a>2. 尽可能少的模块上应用<code>loader</code></h4><ul>
+<li><code>include</code> <code>exclude</code></li>
+</ul>
+<h4 id="3-尽可能少的使用plugin"><a href="#3-尽可能少的使用plugin" class="headerlink" title="3. 尽可能少的使用plugin"></a>3. 尽可能少的使用<code>plugin</code></h4><h4 id="4-resolve"><a href="#4-resolve" class="headerlink" title="4. resolve"></a>4. <code>resolve</code></h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">resolve: &#123;</span><br><span class="line">    extensions: [<span class="string">'.js'</span>],</span><br><span class="line">    alias: &#123;</span><br><span class="line">        <span class="string">'src'</span>: path.resolve(__dirname, <span class="string">'../src'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>extensions</code>: 可以让你 import 模块的时候不写格式，当你不写格式的时候，webpack 会默认通过 extensions 中的格式去相应的文件夹中找</p>
+<p><code>alias</code>:当你<code>import</code>的路径很长的时候，最好使用别名，能简化你的路径。</p>
+<p>比如：<code>import index.js from &#39;../src/a/b/c/index.js&#39;</code></p>
+<p>设置别名：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">resolve: &#123;</span><br><span class="line">    alias: &#123;</span><br><span class="line">        <span class="string">'@c'</span>: path.resolve(__dirname, <span class="string">'../src/a/b/c'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样你的<code>import</code>导入代码就可以改成<code>import index.js from &#39;@c/index.js&#39;</code></p>
+<h4 id="5-dllPlugin"><a href="#5-dllPlugin" class="headerlink" title="5. dllPlugin"></a>5. dllPlugin</h4><p>我们先记录下不使用<code>dll</code>打包时间<code>787ms</code>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Time: <span class="number">787</span>ms</span><br><span class="line">Built at: <span class="number">2019</span><span class="number">-05</span><span class="number">-04</span> <span class="number">18</span>:<span class="number">32</span>:<span class="number">29</span></span><br><span class="line">     Asset       Size  Chunks             Chunk Names</span><br><span class="line"> bundle.js    <span class="number">861</span> KiB    main  [emitted]  main</span><br><span class="line">index.html  <span class="number">396</span> bytes          [emitted]</span><br></pre></td></tr></table></figure>
+
+<p>接下来我们就尝试使用<code>dll</code>技术</p>
+<p>我们先配置一个用于打包<code>dll</code>文件的<code>webpack</code>配置文件，生成打包后的<code>js</code>文件与描述动态链接库的<code>manifest.json</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.dll.config.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">	entry: &#123;</span><br><span class="line">		vendor: [<span class="string">'jquery'</span>, <span class="string">'lodash'</span>] <span class="comment">// 要打包进vendor的第三方库</span></span><br><span class="line">	&#125;,</span><br><span class="line">	output: &#123;</span><br><span class="line">		filename: <span class="string">'[name].dll.js'</span>, <span class="comment">// 打包后的文件名</span></span><br><span class="line">		path: path.resolve(__dirname, <span class="string">'./dll'</span>), <span class="comment">// 打包后存储的位置</span></span><br><span class="line">		library: <span class="string">'[name]_[hash]'</span> <span class="comment">// 挂载到全局变量的变量名，这里要注意 这里的library一定要与DllPlugin中的name一致</span></span><br><span class="line">	&#125;,</span><br><span class="line">	plugins: [</span><br><span class="line">		<span class="keyword">new</span> webpack.DllPlugin(&#123;</span><br><span class="line">			<span class="comment">// 用于打包出一个个单独的动态链接库文件</span></span><br><span class="line">			name: <span class="string">'[name]_[hash]'</span>, <span class="comment">// 引用output打包出的模块变量名，切记这里必须与output.library一致</span></span><br><span class="line">			path: path.join(__dirname, <span class="string">'./dll'</span>, <span class="string">'[name].manifest.json'</span>) <span class="comment">// 描述动态链接库的 manifest.json 文件输出时的文件名称</span></span><br><span class="line">		&#125;)</span><br><span class="line">	]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重点：这里引入的 DllPlugin 插件，该插件将生成一个 manifest.json 文件，该文件供 webpack.config.js 中加入的 DllReferencePlugin 使用，使我们所编写的源文件能正确地访问到我们所需要的静态资源（运行时依赖包）。</strong></p>
+<p>配置下<code>package.json</code>文件的<code>scripts</code>: <code>&quot;build:dll&quot;: &quot;webpack --config webpack.dll.config.js&quot;</code></p>
+<p>执行下 <code>npm run build:dll</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Time: <span class="number">548</span>ms</span><br><span class="line">Built at: <span class="number">2019</span><span class="number">-05</span><span class="number">-04</span> <span class="number">18</span>:<span class="number">54</span>:<span class="number">09</span></span><br><span class="line">        Asset     Size  Chunks             Chunk Names</span><br><span class="line">vendor.dll.js  <span class="number">157</span> KiB       <span class="number">0</span>  [emitted]  vendor</span><br></pre></td></tr></table></figure>
+
+<p>除了打包出<code>dll</code>文件之外，还得再主<code>webpack</code>配置文件中引入。这里就需要使用到<code>DllReferencePlugin</code>。具体配置如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.config.js</span></span><br><span class="line"><span class="keyword">new</span> webpack.DllReferencePlugin(&#123;</span><br><span class="line">  manifest: <span class="built_in">require</span>(<span class="string">'./dll/vendor.manifest.json'</span>)</span><br><span class="line">&#125;),</span><br></pre></td></tr></table></figure>
+
+<p>这里的<code>manifest</code>：需要配置的是你<code>dllPlugin</code>打包出来的<code>manifest.json</code>文件。让主<code>webpack</code>配置文件通过这个</p>
+<p>描述动态链接库<code>manifest.json</code>文件，让<code>js</code>导入该模块的时候，直接引用<code>dll</code>文件夹中打包好的模块。</p>
+<p>看似都配置好了，接下来执行下命令 <code>npm run build</code></p>
+<p>使用<code>dll</code>打包后时间：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Time: <span class="number">471</span>ms</span><br><span class="line">Built at: <span class="number">2019</span><span class="number">-05</span><span class="number">-04</span> <span class="number">18</span>:<span class="number">19</span>:<span class="number">49</span></span><br><span class="line">     Asset       Size  Chunks             Chunk Names</span><br><span class="line"> bundle.js   <span class="number">6.43</span> KiB    main  [emitted]  main</span><br><span class="line">index.html  <span class="number">182</span> bytes          [emitted]</span><br></pre></td></tr></table></figure>
+
+<p><strong>直接从最开始的<code>787ms</code>降低到<code>471ms</code>，当你抽离的第三方模块越多，这个效果就越明显。</strong></p>
+<p>浏览器跑下<code>html</code>页面，会报错</p>
+<p><code>Uncaught ReferenceError: vendor_e406fbc5b0a0acb4f4e9 is not defined</code></p>
+<p>这是因为<code>index.html</code>还需要通过<code>script</code>标签引入这个<code>dll</code>打包出来的<code>js</code>文件</p>
+<p>我们如果每次自己手动引入的话会比较麻烦，如果<code>dll</code>文件非常多的话，就难以想象了。</p>
+<p>这个时候就需要借助<code>add-asset-html-webpack-plugin</code>这个包了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> AddAssetHtmlPlugin = <span class="built_in">require</span>(<span class="string">'add-asset-html-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> AddAssetHtmlPlugin(&#123;</span><br><span class="line">	filepath: path.resolve(__dirname, <span class="string">'./dll/vendor.dll.js'</span>)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>通过这包，<code>webpack</code>会将<code>dll</code>打包出来的<code>js</code>文件通过<code>script</code>标签引入到<code>index.html</code>文件中</p>
+<p>这个时候你在<code>npm run build</code>，访问下页面就正常了</p>
+<h4 id="6-控制包文件大小"><a href="#6-控制包文件大小" class="headerlink" title="6. 控制包文件大小"></a>6. 控制包文件大小</h4><p>tree-shaking 等</p>
+<h4 id="7-thread-loader-parallel-webpack-happypack-等多进程打包"><a href="#7-thread-loader-parallel-webpack-happypack-等多进程打包" class="headerlink" title="7. thread-loader parallel-webpack happypack 等多进程打包"></a>7. thread-loader parallel-webpack happypack 等多进程打包</h4><h4 id="8-合理使用-sourceMap"><a href="#8-合理使用-sourceMap" class="headerlink" title="8. 合理使用 sourceMap"></a>8. 合理使用 sourceMap</h4><h4 id="9-结合-stats-分析打包结果"><a href="#9-结合-stats-分析打包结果" class="headerlink" title="9. 结合 stats 分析打包结果"></a>9. 结合 stats 分析打包结果</h4><p>借助线上或者本地打包分析工具</p>
+<h4 id="10-开发环境内存编译"><a href="#10-开发环境内存编译" class="headerlink" title="10. 开发环境内存编译"></a>10. 开发环境内存编译</h4><p>开发环境的时候不会生成 dist 文件夹，会直接从内存中读取，因为内存读取比硬盘读取快</p>
+<h4 id="11-开发环境无用插件剔除"><a href="#11-开发环境无用插件剔除" class="headerlink" title="11. 开发环境无用插件剔除"></a>11. 开发环境无用插件剔除</h4><p>F</p>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/blog/tags/webpack/" rel="tag">webpack</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="https://s1.ax1x.com/2020/03/29/GVxai6.png" alt="支付宝"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="https://s1.ax1x.com/2020/03/29/GVzAfK.png" alt="微信"></div>
+</a>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/blog/2019/05/15/webpack4%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">webpack4学习笔记（四）</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/blog/2019/05/15/webpack4%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89/">
+                <span class="level-item">webpack4学习笔记（二）</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="valine-thread" class="content"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#valine-thread' ,
+        notify: false,
+        verify: false,
+        app_id: '6wph3PoS8fVVU86A0GoJPvbu-gzGzoHsz',
+        app_key: 'N6A70pqCwTUE03HESBBPHAIu',
+        placeholder: '请输入'
+    });
+</script>
+
+    </div>
+</div>
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                    <figure class="image is-128x128 has-mb-6">
+                        <img class="" src="/blog/images/avatar.png" alt="zhouatie">
+                    </figure>
+                    
+                    <p class="is-size-4 is-block">
+                        zhouatie
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        记录点滴
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>杭州</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <a href="/blog/archives">
+                        <p class="title has-text-weight-normal">
+                            26
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <a href="/blog/categories">
+                        <p class="title has-text-weight-normal">
+                            2
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <a href="/blog/tags">
+                        <p class="title has-text-weight-normal">
+                            15
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/zhouatie" target="_blank" rel="noopener">
+                关注我</a>
+        </div>
+        
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Github" href="https://github.com/zhouatie">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            链接
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://hexo.io" target="_blank" rel="noopener">
+                    <span class="level-left">
+                        <span class="level-item">Hexo</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">hexo.io</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/zhouatie" target="_blank" rel="noopener">
+                    <span class="level-left">
+                        <span class="level-item">zhouatie</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/blog/categories/%E5%89%8D%E7%AB%AF/">
+            <span class="level-start">
+                <span class="level-item">前端</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">25</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/blog/categories/%E5%B7%A5%E5%85%B7/">
+            <span class="level-start">
+                <span class="level-item">工具</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/blog/tags/cache/" style="font-size: 10px;">cache</a> <a href="/blog/tags/docker/" style="font-size: 12.5px;">docker</a> <a href="/blog/tags/fanyi/" style="font-size: 10px;">fanyi</a> <a href="/blog/tags/formdata/" style="font-size: 10px;">formdata</a> <a href="/blog/tags/http/" style="font-size: 10px;">http</a> <a href="/blog/tags/image-preview/" style="font-size: 10px;">image-preview</a> <a href="/blog/tags/js/" style="font-size: 20px;">js</a> <a href="/blog/tags/nginx/" style="font-size: 12.5px;">nginx</a> <a href="/blog/tags/node/" style="font-size: 12.5px;">node</a> <a href="/blog/tags/plugin/" style="font-size: 20px;">plugin</a> <a href="/blog/tags/promise/" style="font-size: 10px;">promise</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/socket-io/" style="font-size: 10px;">socket.io</a> <a href="/blog/tags/vue/" style="font-size: 15px;">vue</a> <a href="/blog/tags/webpack/" style="font-size: 17.5px;">webpack</a>
+    </div>
+</div>
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/11/25/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BF%BB%E8%AF%91%E6%8F%92%E4%BB%B6/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GelXJP.png" alt="命令行翻译插件">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-24T17:55:49.000Z">2019-11-25</time></div>
+                    <a href="/blog/2019/11/25/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BF%BB%E8%AF%91%E6%8F%92%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">命令行翻译插件</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/09/12/%E6%89%8B%E5%86%99Promise/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/Gelose.png" alt="手写Promise">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-11T17:54:02.000Z">2019-09-12</time></div>
+                    <a href="/blog/2019/09/12/%E6%89%8B%E5%86%99Promise/" class="title has-link-black-ter is-size-6 has-text-weight-normal">手写Promise</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/09/01/%E5%89%8D%E7%AB%AF%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%84nginx%E7%9F%A5%E8%AF%86/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeMNLj.png" alt="前端必须知道的nginx知识">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-31T17:35:12.000Z">2019-09-01</time></div>
+                    <a href="/blog/2019/09/01/%E5%89%8D%E7%AB%AF%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%84nginx%E7%9F%A5%E8%AF%86/" class="title has-link-black-ter is-size-6 has-text-weight-normal">前端必须知道的nginx知识</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%AE%9E%E6%88%98%E7%AF%87/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeMSsJ.png" alt="docker从入门到实战-实战篇">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-06T17:34:00.000Z">2019-07-07</time></div>
+                    <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%AE%9E%E6%88%98%E7%AF%87/" class="title has-link-black-ter is-size-6 has-text-weight-normal">docker从入门到实战-实战篇</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%9F%BA%E7%A1%80%E7%AF%87/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeMSsJ.png" alt="docker从入门到实战-基础篇">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-06T17:30:11.000Z">2019-07-07</time></div>
+                    <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%9F%BA%E7%A1%80%E7%AF%87/" class="title has-link-black-ter is-size-6 has-text-weight-normal">docker从入门到实战-基础篇</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/cache/">
+                        <span class="tag">cache</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/docker/">
+                        <span class="tag">docker</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/fanyi/">
+                        <span class="tag">fanyi</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/formdata/">
+                        <span class="tag">formdata</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/http/">
+                        <span class="tag">http</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/image-preview/">
+                        <span class="tag">image-preview</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/js/">
+                        <span class="tag">js</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/nginx/">
+                        <span class="tag">nginx</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/node/">
+                        <span class="tag">node</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/plugin/">
+                        <span class="tag">plugin</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/promise/">
+                        <span class="tag">promise</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/react/">
+                        <span class="tag">react</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/socket-io/">
+                        <span class="tag">socket.io</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/vue/">
+                        <span class="tag">vue</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/webpack/">
+                        <span class="tag">webpack</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/11/25/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BF%BB%E8%AF%91%E6%8F%92%E4%BB%B6/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GelXJP.png" alt="命令行翻译插件">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-24T17:55:49.000Z">2019-11-25</time></div>
+                    <a href="/blog/2019/11/25/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BF%BB%E8%AF%91%E6%8F%92%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">命令行翻译插件</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/09/12/%E6%89%8B%E5%86%99Promise/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/Gelose.png" alt="手写Promise">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-11T17:54:02.000Z">2019-09-12</time></div>
+                    <a href="/blog/2019/09/12/%E6%89%8B%E5%86%99Promise/" class="title has-link-black-ter is-size-6 has-text-weight-normal">手写Promise</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/09/01/%E5%89%8D%E7%AB%AF%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%84nginx%E7%9F%A5%E8%AF%86/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeMNLj.png" alt="前端必须知道的nginx知识">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-31T17:35:12.000Z">2019-09-01</time></div>
+                    <a href="/blog/2019/09/01/%E5%89%8D%E7%AB%AF%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%84nginx%E7%9F%A5%E8%AF%86/" class="title has-link-black-ter is-size-6 has-text-weight-normal">前端必须知道的nginx知识</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%AE%9E%E6%88%98%E7%AF%87/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeMSsJ.png" alt="docker从入门到实战-实战篇">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-06T17:34:00.000Z">2019-07-07</time></div>
+                    <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%AE%9E%E6%88%98%E7%AF%87/" class="title has-link-black-ter is-size-6 has-text-weight-normal">docker从入门到实战-实战篇</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%9F%BA%E7%A1%80%E7%AF%87/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeMSsJ.png" alt="docker从入门到实战-基础篇">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-06T17:30:11.000Z">2019-07-07</time></div>
+                    <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%9F%BA%E7%A1%80%E7%AF%87/" class="title has-link-black-ter is-size-6 has-text-weight-normal">docker从入门到实战-基础篇</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/cache/">
+                        <span class="tag">cache</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/docker/">
+                        <span class="tag">docker</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/fanyi/">
+                        <span class="tag">fanyi</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/formdata/">
+                        <span class="tag">formdata</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/http/">
+                        <span class="tag">http</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/image-preview/">
+                        <span class="tag">image-preview</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/js/">
+                        <span class="tag">js</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/nginx/">
+                        <span class="tag">nginx</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/node/">
+                        <span class="tag">node</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/plugin/">
+                        <span class="tag">plugin</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/promise/">
+                        <span class="tag">promise</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/react/">
+                        <span class="tag">react</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/socket-io/">
+                        <span class="tag">socket.io</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/vue/">
+                        <span class="tag">vue</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/webpack/">
+                        <span class="tag">webpack</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/blog/">
+                
+                    <img src="/blog/images/logo.svg" alt="webpack4学习笔记（三）" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 zhouatie&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a>
+                
+                <br>
+                <span id="busuanzi_container_site_uv">
+                共<span id="busuanzi_value_site_uv">0</span>个访客
+                </span>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/zhouatie">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+<script>
+var IcarusThemeSettings = {
+    site: {
+        url: 'http://zhouatie.github.io/blog',
+        external_link: {"enable":true,"exclude":[]}
+    },
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+
+
+<script src="/blog/js/animation.js"></script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/blog/js/gallery.js" defer></script>
+
+
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/blog/js/back-to-top.js" defer></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/blog/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/blog/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/blog/js/insight.js" defer></script>
+<link rel="stylesheet" href="/blog/css/search.css">
+<link rel="stylesheet" href="/blog/css/insight.css">
+    
+</body>
+</html>

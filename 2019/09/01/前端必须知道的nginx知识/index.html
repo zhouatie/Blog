@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 4.2.0" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>前端必须知道的nginx知识 - atie&#39;s blog</title>
+
+
+    <meta name="description" content="前端开发者进阶之路不得不学 nginx。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端必须知道的nginx知识">
+<meta property="og:url" content="http://zhouatie.github.io/blog/2019/09/01/%E5%89%8D%E7%AB%AF%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%84nginx%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:site_name" content="atie&#39;s blog">
+<meta property="og:description" content="前端开发者进阶之路不得不学 nginx。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/30/GeMNLj.png">
+<meta property="article:published_time" content="2019-08-31T17:35:12.000Z">
+<meta property="article:modified_time" content="2020-03-29T18:28:13.063Z">
+<meta property="article:author" content="zhouatie">
+<meta property="article:tag" content="nginx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/03/30/GeMNLj.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/blog/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/blog/css/back-to-top.css">
+
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="/blog/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+<link rel="stylesheet" href="/blog/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/blog/">
+            
+                <img src="/blog/images/logo.svg" alt="前端必须知道的nginx知识" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/blog/">主页</a>
+                
+                <a class="navbar-item"
+                href="/blog/archives">归档</a>
+                
+                <a class="navbar-item"
+                href="/blog/categories">分类</a>
+                
+                <a class="navbar-item"
+                href="/blog/tags">标签</a>
+                
+                <a class="navbar-item"
+                href="/blog/about">关于</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    <a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/zhouatie">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-image">
+        <span  class="image is-7by1">
+            <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeMNLj.png" alt="前端必须知道的nginx知识">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2019-08-31T17:35:12.000Z">2019-09-01</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    26 分钟 读完 (大约 3847 个字)
+                </span>
+                
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span>次访问
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                前端必须知道的nginx知识
+            
+        </h1>
+        <div class="content">
+            <p>前端开发者进阶之路不得不学 nginx。</p>
+<a id="more"></a>
+
+<h2 id="本文内容涉及"><a href="#本文内容涉及" class="headerlink" title="本文内容涉及"></a>本文内容涉及</h2><ul>
+<li>nginx 命令</li>
+<li>配置文件、配置解释</li>
+<li>变量</li>
+<li>日志</li>
+<li>跨域</li>
+<li>代理请求</li>
+<li>location 拦截详解</li>
+<li>gzip</li>
+<li>防盗链</li>
+<li>反向代理、正向代理</li>
+<li>负载均衡</li>
+<li>缓存</li>
+<li>rewrite</li>
+</ul>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><ul>
+<li>nginx -T 查看当前 nginx 最终的配置</li>
+<li>nginx -t 检查配置文件是否有语法错误</li>
+<li>nginx -s reload 向主进程发送信号，重新加载配置文件</li>
+<li>nginx -s stop 快速关闭</li>
+<li>nginx -s quit 等待工作进程处理完成后关闭</li>
+</ul>
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">user  nginx; # 定义 Nginx 运行的用户</span><br><span class="line">worker_processes  1; # 设置工作进程的数量</span><br><span class="line"></span><br><span class="line">error_log  /var/log/nginx/error.log warn; #nginx 错误日志</span><br><span class="line">pid        /var/run/nginx.pid; # nginx.pid存放的是nginx的master进程的进程号</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> events模块中包含nginx中所有处理连接的设置</span></span><br><span class="line">events &#123;</span><br><span class="line">    #工作进程的最大连接数量 理论上每台nginx服务器的最大连接数为worker_processes*worker_connections worker_processes为我们再main中开启的进程数</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 提供http服务相关的一些配置参数</span></span><br><span class="line">http &#123;</span><br><span class="line">    # include 是个主模块指令，可以将配置文件拆分并引用，可以减少主配置文件的复杂度, 这里是加载一些文件类型</span><br><span class="line">    include       /etc/nginx/mime.types;</span><br><span class="line">    # default_type 属于HTTP核心模块指令，这里设定默认类型为二进制流，也就是当文件类型未定义时使用这种方式</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    # 定义日志格式</span><br><span class="line">    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '</span><br><span class="line">                      '$status $body_bytes_sent "$http_referer" '</span><br><span class="line">                      '"$http_user_agent" "$http_x_forwarded_for"';</span><br><span class="line"></span><br><span class="line">    # 定义本虚拟主机的访问日志</span><br><span class="line">    access_log  /var/log/nginx/access.log  main;</span><br><span class="line">    sendfile on; #开启高效文件传输模式，sendfile指令指定nginx是否调用sendfile函数来输出文件，对于普通应用设为 on，如果用来进行下载等应用磁盘IO重负载应用，可设置为off，以平衡磁盘与网络I/O处理速度，降低系统的负载。注意：如果图片显示不正常把这个改 成off</span><br><span class="line">    sendfile        on;</span><br><span class="line">    tcp_nopush     on;</span><br><span class="line"></span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    #gzip模块设置</span><br><span class="line">    gzip on; #开启gzip压缩输出</span><br><span class="line">    gzip_min_length 1k; #最小压缩文件大小</span><br><span class="line">    gzip_buffers 4 16k; #压缩缓冲区</span><br><span class="line">    gzip_http_version 1.0; #压缩版本（默认1.1，前端如果是squid2.5请使用1.0）</span><br><span class="line">    gzip_comp_level 2; #压缩等级</span><br><span class="line"></span><br><span class="line">    limit_zone crawler $binary_remote_addr 10m; #开启限制IP连接数的时候需要使用</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80; # 表示http监听的端口</span><br><span class="line">        server_name  localhost; # 域名可以有多个，用空格隔开  当出现多个server监听的端口一样时，可通过server_name 做区分</span><br><span class="line">        # 有些指令可以支持正则表达式</span><br><span class="line">        location / &#123; # 用于匹配URI，这里也可以用正则的方式匹配 ~ 表示大小写敏感  ~*表示大小写不敏感</span><br><span class="line">            root   html; # 指定了静态文件的根目录</span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line">        error_page   500 502 503 504  /50x.html; # 表示当在500 502 503 504 错误码的时候重定向到 /50x.html</span><br><span class="line">        location = /50x.html &#123;</span><br><span class="line">            root   html;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    include /etc/nginx/conf.d/*.conf; # 用于加载其他配置文件进来</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>$arg_PARAMETER</code></td>
+<td>这个变量值为：<code>GET</code> 请求中变量名 PARAMETER 参数的值。</td>
+</tr>
+<tr>
+<td><code>$args</code></td>
+<td>这个变量等于 <code>GET</code> 请求中的参数。例如，<code>foo=123&amp;bar=blahblah;</code>这个变量只可以被修改</td>
+</tr>
+<tr>
+<td><code>$binary_remote_addr</code></td>
+<td>二进制码形式的客户端地址。</td>
+</tr>
+<tr>
+<td><code>$body_bytes_sent</code></td>
+<td>传送页面的字节数</td>
+</tr>
+<tr>
+<td><code>$content_length</code></td>
+<td>请求头中的 <code>Content-length</code> 字段。</td>
+</tr>
+<tr>
+<td><code>$content_type</code></td>
+<td>请求头中的 <code>Content-Type</code> 字段。</td>
+</tr>
+<tr>
+<td><code>$cookie_COOKIE</code></td>
+<td><code>cookie COOKIE</code> 的值。</td>
+</tr>
+<tr>
+<td><code>$document_root</code></td>
+<td>当前请求在 <code>root</code> 指令中指定的值。</td>
+</tr>
+<tr>
+<td><code>$document_uri</code></td>
+<td>与 <code>$uri</code> 相同。</td>
+</tr>
+<tr>
+<td><code>$host</code></td>
+<td>请求中的主机头<code>(Host)</code>字段，如果请求中的主机头不可用或者空，则为处理请求的 <code>server</code> 名称(处理请求的 <code>server</code> 的 <code>server_name</code> 指令的值)。值为小写，不包含端口。</td>
+</tr>
+<tr>
+<td><code>$hostname</code></td>
+<td>机器名使用 <code>gethostname</code> 系统调用的值</td>
+</tr>
+<tr>
+<td><code>$http_HEADER</code></td>
+<td><code>HTTP</code>请求头中的内容，HEADER 为 HTTP 请求中的内容转为小写，-变为_(破折号变为下划线)，例如：<code>$http_user_agent</code>(<code>Uaer-Agent</code> 的值), <code>$http_referer</code>…;</td>
+</tr>
+<tr>
+<td><code>$sent_http_HEADER</code></td>
+<td><code>HTTP</code>响应头中的内容，<code>HEADER</code>为<code>HTTP</code>响应中的内容转为小写，-变为_(破折号变为下划线)， 例如：<code>$sent_http_cache_control, $sent_http_content_type</code>…;</td>
+</tr>
+<tr>
+<td><code>$is_args</code></td>
+<td>如果<code>$args</code> 设置，值为”?”，否则为””。</td>
+</tr>
+<tr>
+<td><code>$limit_rate</code></td>
+<td>这个变量可以限制连接速率。</td>
+</tr>
+<tr>
+<td><code>$nginx_version</code></td>
+<td>当前运行的 <code>nginx</code> 版本号。</td>
+</tr>
+<tr>
+<td><code>$query_string</code></td>
+<td>与<code>$args</code> 相同。</td>
+</tr>
+<tr>
+<td><code>$remote_addr</code></td>
+<td>客户端的 IP 地址。</td>
+</tr>
+<tr>
+<td><code>$remote_port</code></td>
+<td>客户端的端口。</td>
+</tr>
+<tr>
+<td><code>$remote_user</code></td>
+<td>已经经过 <code>Auth Basic Module</code> 验证的用户名。</td>
+</tr>
+<tr>
+<td><code>$request_filename</code></td>
+<td>当前连接请求的文件路径，由 <code>root</code> 或 <code>alias</code> 指令与 <code>URI</code> 请求生成。</td>
+</tr>
+<tr>
+<td><code>$request_body</code></td>
+<td>这个变量（0.7.58+）包含请求的主要信息。在使用 <code>proxy_pass</code> 或 <code>fastcgi_pass</code> 指令的 <code>location</code> 中比较有意义。</td>
+</tr>
+<tr>
+<td><code>$request_body_file</code></td>
+<td>客户端请求主体信息的临时文件名。</td>
+</tr>
+<tr>
+<td><code>$request_completion</code></td>
+<td>如果请求成功，设为”OK”；如果请求未完成或者不是一系列请求中最后一部分则设为空。</td>
+</tr>
+<tr>
+<td><code>$request_method</code></td>
+<td>这个变量是客户端请求的动作，通常为 GET 或 POST。包括 0.8.20 及之前的版本中，这个变量总为 main request 中的动作，如果当前请求是一个子请求，并不使用这个当前请求的动作。</td>
+</tr>
+<tr>
+<td><code>$request_uri</code></td>
+<td>这个变量等于包含一些客户端请求参数的原始 URI，它无法修改，请查看$uri 更改或重写 URI。</td>
+</tr>
+<tr>
+<td><code>$scheme</code></td>
+<td>所用的协议，比如<code>http</code>或者是<code>https</code>，比如<code>rewrite ^(.+)$ $scheme://example.com$1 redirect</code>;</td>
+</tr>
+<tr>
+<td><code>$server_addr</code></td>
+<td>服务器地址，在完成一次系统调用后可以确定这个值，如果要绕开系统调用，则必须在 <code>listen</code> 中指定地址并且使用 <code>bind</code> 参数。</td>
+</tr>
+<tr>
+<td><code>$server_name</code></td>
+<td>服务器名称。</td>
+</tr>
+<tr>
+<td><code>$server_port</code></td>
+<td>请求到达服务器的端口号。</td>
+</tr>
+<tr>
+<td><code>$server_protocol</code></td>
+<td>请求使用的协议，通常是 <code>HTTP/1.0</code> 或 <code>HTTP/1.1</code>。</td>
+</tr>
+</tbody></table>
+<h3 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h3><h4 id="error-log"><a href="#error-log" class="headerlink" title="error_log"></a>error_log</h4><p>表示错误日志。<code>error_log /var/log/nginx/error.log warn;</code> 。错误日志记录了访问出错的信息。有利于我们排查错误。</p>
+<h4 id="access-log"><a href="#access-log" class="headerlink" title="access_log"></a>access_log</h4><p>表示访问日志。需要指定日志格式 <code>log_format</code>。通过访问日志我们可以得到用户的 IP 地址、浏览器的信息，请求的处理时间等信息</p>
+<h4 id="log-format"><a href="#log-format" class="headerlink" title="log_format"></a>log_format</h4><p>日志格式可以结合上面的变量，来指定访问日志的输出格式。</p>
+<p>如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">log_format main '$host $document_uri $server_addr $remote_addr $remote_port';</span><br><span class="line">server &#123;</span><br><span class="line">  listen 5002;</span><br><span class="line">  access_log /usr/local/etc/nginx/servers/access.log main;</span><br><span class="line">  location / &#123;</span><br><span class="line">    root /usr/local/etc/nginx/servers;</span><br><span class="line">    index index.html;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>定义了个日志格式 main</p>
+<p>然后在将<code>access_log</code>绑定日志<code>main</code></p>
+<p>输出：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">localhost /index.html 127.0.0.1 127.0.0.1 61517</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，access_log 按照我的 main 日志格式输出了。</p>
+<h3 id="跨域"><a href="#跨域" class="headerlink" title="跨域"></a>跨域</h3><p>相信作为前端开发者，你肯定知道 CORS。</p>
+<ul>
+<li><p>Access-Control-Allow-Origin <origin> | *;<br>其中，origin 参数的值指定了允许访问该资源的外域 URI。对于不需要携带身份凭证的请求，服务器可以指定该字段的值为通配符，表示允许来自所有域的请求。</p>
+</li>
+<li><p>Access-Control-Expose-Headers: X-My-Custom-Header, X-Another-Custom-Header</p>
+</li>
+</ul>
+<p>在跨域访问时，XMLHttpRequest 对象的 getResponseHeader()方法只能拿到一些最基本的响应头，Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma，如果要访问其他头，则需要服务器设置本响应头。</p>
+<ul>
+<li><p>Access-Control-Max-Age<br>Access-Control-Max-Age 头指定了 preflight 请求的结果能够被缓存多久;Access-Control-Max-Age: 86400</p>
+</li>
+<li><p>Access-Control-Allow-Credentials</p>
+</li>
+</ul>
+<p>指定了当浏览器的 credentials 设置为 true 时是否允许浏览器读取 response 的内容。当用在对 preflight 预检测请求的响应中时，它指定了实际的请求是否可以使用 credentials。请注意：简单 GET 请求不会被预检；如果对此类请求的响应中不包含该字段，这个响应将被忽略掉，并且浏览器也不会将相应内容返回给网页</p>
+<p>话不多少，下面就直接贴代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span>;</span><br><span class="line"></span><br><span class="line">axios.get(<span class="string">'http://127.0.0.1:5556/api/abc'</span>).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">	<span class="built_in">console</span>.log(res, <span class="string">'res'</span>);</span><br><span class="line">	<span class="built_in">document</span>.write(res);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 5556;</span><br><span class="line">    location /api &#123;</span><br><span class="line">        proxy_pass http://localhost:5000;</span><br><span class="line">        add_header Access-Control-Allow-Origin *;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将 5556 端口的请求路径 /api 开头的 转发到 5000 端口的 node 服务上。添加上<code>Access-Control-Allow-Origin *</code>就可解决跨域问题。</p>
+<h3 id="代理请求"><a href="#代理请求" class="headerlink" title="代理请求"></a>代理请求</h3><p>代理请求可以看下上面的跨域。把 5556 端口的请求转发到 5000 端口的服务上。</p>
+<h3 id="location-拦截详解"><a href="#location-拦截详解" class="headerlink" title="location 拦截详解"></a>location 拦截详解</h3><h4 id="修饰符"><a href="#修饰符" class="headerlink" title="修饰符"></a>修饰符</h4><ul>
+<li><code>=</code>: 精确匹配路径</li>
+<li><code>~</code>: 表示用该符号后面的正则去匹配路径，区分大小写</li>
+<li><code>~*</code>: 表示用该符号后面的正则去匹配路径，不区分大小写</li>
+<li><code>^~</code>: 表示如果该符号后面的字符是最佳匹配，采用该规则，不再进行后续的查找。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">location = / &#123;</span><br><span class="line">    [ configuration A ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location / &#123;</span><br><span class="line">    [ configuration B ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location /api/ &#123;</span><br><span class="line">    [ configuration C ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location ^~ /static/ &#123;</span><br><span class="line">    [ configuration D ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location ~* \.(gif|jpg|jpeg)$ &#123;</span><br><span class="line">    [ configuration E ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>请求/精准匹配 A，不再往下查找。</p>
+<p>请求/index.html 匹配 B。首先查找匹配的前缀字符，找到最长匹配是配置 B，接着又按照顺序查找匹配的正则。结果没有找到，因此使用先前标记的最长匹配，即配置 B。</p>
+<p>请求/api/list 匹配 C。首先找到最长匹配 C，由于后面没有匹配的正则，所以使用最长匹配 C。</p>
+<p>请求/user/1.jpg 匹配 E。首先进行前缀字符的查找，找到最长匹配项 C，继续进行正则查找，找到匹配项 E。因此使用 E。</p>
+<p>请求/static/img.jpg 匹配 D。首先进行前缀字符的查找，找到最长匹配 D。但是，特殊的是它使用了^~修饰符，不再进行接下来的正则的匹配查找，因此使用 D。这里，如果没有前面的修饰符，其实最终的匹配是 E。</p>
+<p>请求/router/pageA 匹配 B。因为 B 表示任何以/开头的 URL 都匹配。在上面的配置中，只有 B 能满足，所以匹配 B。</p>
+<h3 id="gzip"><a href="#gzip" class="headerlink" title="gzip"></a>gzip</h3><h4 id="配置说明"><a href="#配置说明" class="headerlink" title="配置说明"></a>配置说明</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> gzip 默认off 默认关闭gzip</span></span><br><span class="line">gzip             on;</span><br><span class="line"><span class="meta">#</span><span class="bash"> gzip_min_length 默认0</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 作用域: http, server, location</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 设置允许压缩的页面最小字节数，页面字节数从header头中的Content-Length中进行获取。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 默认值是0，不管页面多大都压缩。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 建议设置成大于1k的字节数，小于1k可能会越压越大。 即: gzip_min_length 1024</span></span><br><span class="line">gzip_min_length  1k;</span><br><span class="line"><span class="meta">#</span><span class="bash"> gzip_comp_level 默认 1 范围 1 ~ 9</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 作用域: http, server, location</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> gzip压缩比，1 压缩比最小处理速度最快，9 压缩比最大但处理最慢（传输快但比较消耗cpu）。</span></span><br><span class="line">gzip_comp_level  6;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 默认值: gzip_types text/html</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 作用域: http, server, location</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 匹配MIME类型进行压缩，（无论是否指定）<span class="string">"text/html"</span>类型总是会被压缩的。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 注意：如果作为http server来使用，主配置文件中要包含文件类型配置文件</span></span><br><span class="line">gzip_types       text/plain application/x-javascript text/css application/xml application/javascript application/json;</span><br></pre></td></tr></table></figure>
+
+<h4 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">  listen 9002;</span><br><span class="line"><span class="meta">  #</span><span class="bash">gzip on;</span></span><br><span class="line">  location / &#123;</span><br><span class="line">    root /usr/local/etc/nginx/servers/;</span><br><span class="line">    index gzip.html;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们先记录下未开启 gzip 时加载的文件大小<br><img src="https://github.com/zhouatie/front-end/tree/master/note/nginx/data/without-gzip.png" alt="without-gzip"></p>
+<p>size 显示的是 1.3kb</p>
+<p>然后我们将 gzip 注释去掉的结果如下</p>
+<p><img src="https://github.com/zhouatie/front-end/tree/master/note/nginx/data/without-gzip.png" alt="with-gzip"></p>
+<p>可以看到只有 300B 了，当然你还可以根据其他配置，比如来控制压缩等级来控制输出的大小。我们前端项目打包的时候可以开启 gzip，这样 nginx 就不用在服务器上进行 gzip 压缩了。</p>
+<h3 id="防盗链"><a href="#防盗链" class="headerlink" title="防盗链"></a>防盗链</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">location ~ .*\.(jpg|png|gif)$ &#123;</span><br><span class="line">  valid_referers none blocked 47.104.184.134;</span><br><span class="line">  if ($invalid_referer) &#123;</span><br><span class="line">    return 403;</span><br><span class="line">  &#125;</span><br><span class="line">  root /data/images;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>valid_referers none | blocked | server_names | string ….;<br>none 检测 Referer 头域不存在的请求<br>blocked 检测 Referer 头域的值被防火墙或者代理服务器删除或伪装的情况。<br>这种情况下，该头域的值不以“http://”或者“https：//”开头<br>server_names 设置一个或多个 URL,检测 Referer 头域的值是否是这些 URL 中的某个。<br>从 nginx 0.5.33 以后支持使用通配符“*”。</p>
+<p><code>valid_referers</code> 用于支持访问该资源的 referers</p>
+<p>$invalid_referer 这个变量为 true 表示不符合上面定义的规则。就 return 403</p>
+<h3 id="反向代理、正向代理"><a href="#反向代理、正向代理" class="headerlink" title="反向代理、正向代理"></a>反向代理、正向代理</h3><h4 id="正向代理"><a href="#正向代理" class="headerlink" title="正向代理"></a>正向代理</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">  proxy_pass http://$http_host$request_uri;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>正向代理你可以理解为代理客户端，比如 VPN。因为国内无法访问国外的网站，所以通过将请求转发到 VPN 服务器，VPN 将你的请求原封不动的转发到国外网址。正向代理，客户端知道服务端，服务端不知道客户端。</p>
+<h4 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h4><p>比如说下面将会讲到的负载均衡。所有请求统一走到一个 nginx 服务上，由这个 nginx 服务讲请求分配到多台服务器上。</p>
+<h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><h4 id="代码演示-1"><a href="#代码演示-1" class="headerlink" title="代码演示"></a>代码演示</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── 9004.html</span><br><span class="line">├── 9005.html</span><br><span class="line">├── 9006.html</span><br><span class="line">└── upstream.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">	listen 9004;</span><br><span class="line">	location / &#123;</span><br><span class="line">		root /usr/local/etc/nginx/servers/;</span><br><span class="line">		index 9004.html;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">server &#123;</span><br><span class="line">        listen 9005;</span><br><span class="line">        location / &#123;</span><br><span class="line">                root /usr/local/etc/nginx/servers/;</span><br><span class="line">                index 9005.html;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line">server &#123;</span><br><span class="line">        listen 9006;</span><br><span class="line">        location / &#123;</span><br><span class="line">                root /usr/local/etc/nginx/servers/;</span><br><span class="line">                index 9006.html;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line">upstream atie &#123;</span><br><span class="line">	server localhost:9004;</span><br><span class="line">    server localhost:9005;</span><br><span class="line">    server localhost:9006;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">	listen 9003;</span><br><span class="line">	location / &#123;</span><br><span class="line">		proxy_pass http://atie;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过上面代码可以看到我通过访问 9003 端口，均衡到其他端口。</p>
+<p>打开浏览器访问 localhost:9003 可以看到页面会分别加载 9004 ~ 9006.html 页面</p>
+<h4 id="配置介绍"><a href="#配置介绍" class="headerlink" title="配置介绍"></a>配置介绍</h4><table>
+<thead>
+<tr>
+<th>状态</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>down</td>
+<td>不参与负载均衡</td>
+</tr>
+<tr>
+<td>backup</td>
+<td>备份的服务器</td>
+</tr>
+<tr>
+<td>max_fails</td>
+<td>允许请求失败的次数</td>
+</tr>
+<tr>
+<td>fail_timeout</td>
+<td>经过 max_fails 失败后，服务暂停的时间</td>
+</tr>
+<tr>
+<td>max_conns</td>
+<td>限制最大的接收的连接数</td>
+</tr>
+<tr>
+<td>weight</td>
+<td>权重比</td>
+</tr>
+</tbody></table>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream atie &#123;</span><br><span class="line">	server localhost:9004 down; # 这里如果加了down 表示负载均衡的时候就不会转到这个服务</span><br><span class="line">    server localhost:9005 backup; # 表示备份 只有当服务挂了，才会走到这个备份服务上</span><br><span class="line">    server localhost:9006 max_fails=1 fail_timeout=10s; # 超过最大次数后，在fail_timeout时间内，新的请求将不会分配给这台机器。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream atie &#123;</span><br><span class="line">	server localhost:9004 weight=1;</span><br><span class="line">    server localhost:9005 weight=2;</span><br><span class="line">    server localhost:9006 weight=3;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当你访问 6 次时，一次走到 9004 2 次走到 9005 3 次走到 9006</p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>通过添加缓存请求头设置过期时间等</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ .*\.(gif|jpg|png|css|js)(.*) &#123;</span><br><span class="line">    expires 90d; # 设置有效90天</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="rewrite"><a href="#rewrite" class="headerlink" title="rewrite"></a>rewrite</h3><p>rewrite 功能就是，使用 nginx 提供的全局变量或自己设置的变量，结合正则表达式和标志位实现 url 重写以及重定向。rewrite 只能放在 server{},location{},if{}中，并且只能对域名后边的除去传递的参数外的字符串起作用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">    rewrite /rewrite/(.*) http://www.$1.com;</span><br><span class="line">    return 200 "ok";</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 在浏览器中输入 127.0.0.1:8080/rewrite/google</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 则临时重定向到 www.google.com</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 后面的 <span class="built_in">return</span> 指令将没有机会执行了</span></span><br></pre></td></tr></table></figure>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/blog/tags/nginx/" rel="tag">nginx</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="https://s1.ax1x.com/2020/03/29/GVxai6.png" alt="支付宝"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="https://s1.ax1x.com/2020/03/29/GVzAfK.png" alt="微信"></div>
+</a>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/blog/2019/09/12/%E6%89%8B%E5%86%99Promise/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">手写Promise</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%AE%9E%E6%88%98%E7%AF%87/">
+                <span class="level-item">docker从入门到实战-实战篇</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="valine-thread" class="content"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#valine-thread' ,
+        notify: false,
+        verify: false,
+        app_id: '6wph3PoS8fVVU86A0GoJPvbu-gzGzoHsz',
+        app_key: 'N6A70pqCwTUE03HESBBPHAIu',
+        placeholder: '请输入'
+    });
+</script>
+
+    </div>
+</div>
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                    <figure class="image is-128x128 has-mb-6">
+                        <img class="" src="/blog/images/avatar.png" alt="zhouatie">
+                    </figure>
+                    
+                    <p class="is-size-4 is-block">
+                        zhouatie
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        记录点滴
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>杭州</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <a href="/blog/archives">
+                        <p class="title has-text-weight-normal">
+                            26
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <a href="/blog/categories">
+                        <p class="title has-text-weight-normal">
+                            2
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <a href="/blog/tags">
+                        <p class="title has-text-weight-normal">
+                            15
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/zhouatie" target="_blank" rel="noopener">
+                关注我</a>
+        </div>
+        
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Github" href="https://github.com/zhouatie">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            链接
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://hexo.io" target="_blank" rel="noopener">
+                    <span class="level-left">
+                        <span class="level-item">Hexo</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">hexo.io</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/zhouatie" target="_blank" rel="noopener">
+                    <span class="level-left">
+                        <span class="level-item">zhouatie</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/blog/categories/%E5%89%8D%E7%AB%AF/">
+            <span class="level-start">
+                <span class="level-item">前端</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">25</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/blog/categories/%E5%B7%A5%E5%85%B7/">
+            <span class="level-start">
+                <span class="level-item">工具</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/blog/tags/cache/" style="font-size: 10px;">cache</a> <a href="/blog/tags/docker/" style="font-size: 12.5px;">docker</a> <a href="/blog/tags/fanyi/" style="font-size: 10px;">fanyi</a> <a href="/blog/tags/formdata/" style="font-size: 10px;">formdata</a> <a href="/blog/tags/http/" style="font-size: 10px;">http</a> <a href="/blog/tags/image-preview/" style="font-size: 10px;">image-preview</a> <a href="/blog/tags/js/" style="font-size: 20px;">js</a> <a href="/blog/tags/nginx/" style="font-size: 12.5px;">nginx</a> <a href="/blog/tags/node/" style="font-size: 12.5px;">node</a> <a href="/blog/tags/plugin/" style="font-size: 20px;">plugin</a> <a href="/blog/tags/promise/" style="font-size: 10px;">promise</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/socket-io/" style="font-size: 10px;">socket.io</a> <a href="/blog/tags/vue/" style="font-size: 15px;">vue</a> <a href="/blog/tags/webpack/" style="font-size: 17.5px;">webpack</a>
+    </div>
+</div>
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/11/25/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BF%BB%E8%AF%91%E6%8F%92%E4%BB%B6/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GelXJP.png" alt="命令行翻译插件">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-24T17:55:49.000Z">2019-11-25</time></div>
+                    <a href="/blog/2019/11/25/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BF%BB%E8%AF%91%E6%8F%92%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">命令行翻译插件</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/09/12/%E6%89%8B%E5%86%99Promise/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/Gelose.png" alt="手写Promise">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-11T17:54:02.000Z">2019-09-12</time></div>
+                    <a href="/blog/2019/09/12/%E6%89%8B%E5%86%99Promise/" class="title has-link-black-ter is-size-6 has-text-weight-normal">手写Promise</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/09/01/%E5%89%8D%E7%AB%AF%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%84nginx%E7%9F%A5%E8%AF%86/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeMNLj.png" alt="前端必须知道的nginx知识">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-31T17:35:12.000Z">2019-09-01</time></div>
+                    <a href="/blog/2019/09/01/%E5%89%8D%E7%AB%AF%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%84nginx%E7%9F%A5%E8%AF%86/" class="title has-link-black-ter is-size-6 has-text-weight-normal">前端必须知道的nginx知识</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%AE%9E%E6%88%98%E7%AF%87/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeMSsJ.png" alt="docker从入门到实战-实战篇">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-06T17:34:00.000Z">2019-07-07</time></div>
+                    <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%AE%9E%E6%88%98%E7%AF%87/" class="title has-link-black-ter is-size-6 has-text-weight-normal">docker从入门到实战-实战篇</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%9F%BA%E7%A1%80%E7%AF%87/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeMSsJ.png" alt="docker从入门到实战-基础篇">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-06T17:30:11.000Z">2019-07-07</time></div>
+                    <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%9F%BA%E7%A1%80%E7%AF%87/" class="title has-link-black-ter is-size-6 has-text-weight-normal">docker从入门到实战-基础篇</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/cache/">
+                        <span class="tag">cache</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/docker/">
+                        <span class="tag">docker</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/fanyi/">
+                        <span class="tag">fanyi</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/formdata/">
+                        <span class="tag">formdata</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/http/">
+                        <span class="tag">http</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/image-preview/">
+                        <span class="tag">image-preview</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/js/">
+                        <span class="tag">js</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/nginx/">
+                        <span class="tag">nginx</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/node/">
+                        <span class="tag">node</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/plugin/">
+                        <span class="tag">plugin</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/promise/">
+                        <span class="tag">promise</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/react/">
+                        <span class="tag">react</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/socket-io/">
+                        <span class="tag">socket.io</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/vue/">
+                        <span class="tag">vue</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/webpack/">
+                        <span class="tag">webpack</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/11/25/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BF%BB%E8%AF%91%E6%8F%92%E4%BB%B6/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GelXJP.png" alt="命令行翻译插件">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-24T17:55:49.000Z">2019-11-25</time></div>
+                    <a href="/blog/2019/11/25/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BF%BB%E8%AF%91%E6%8F%92%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">命令行翻译插件</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/09/12/%E6%89%8B%E5%86%99Promise/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/Gelose.png" alt="手写Promise">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-11T17:54:02.000Z">2019-09-12</time></div>
+                    <a href="/blog/2019/09/12/%E6%89%8B%E5%86%99Promise/" class="title has-link-black-ter is-size-6 has-text-weight-normal">手写Promise</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/09/01/%E5%89%8D%E7%AB%AF%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%84nginx%E7%9F%A5%E8%AF%86/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeMNLj.png" alt="前端必须知道的nginx知识">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-31T17:35:12.000Z">2019-09-01</time></div>
+                    <a href="/blog/2019/09/01/%E5%89%8D%E7%AB%AF%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%84nginx%E7%9F%A5%E8%AF%86/" class="title has-link-black-ter is-size-6 has-text-weight-normal">前端必须知道的nginx知识</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%AE%9E%E6%88%98%E7%AF%87/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeMSsJ.png" alt="docker从入门到实战-实战篇">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-06T17:34:00.000Z">2019-07-07</time></div>
+                    <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%AE%9E%E6%88%98%E7%AF%87/" class="title has-link-black-ter is-size-6 has-text-weight-normal">docker从入门到实战-实战篇</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%9F%BA%E7%A1%80%E7%AF%87/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeMSsJ.png" alt="docker从入门到实战-基础篇">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-06T17:30:11.000Z">2019-07-07</time></div>
+                    <a href="/blog/2019/07/07/docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98-%E5%9F%BA%E7%A1%80%E7%AF%87/" class="title has-link-black-ter is-size-6 has-text-weight-normal">docker从入门到实战-基础篇</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/cache/">
+                        <span class="tag">cache</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/docker/">
+                        <span class="tag">docker</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/fanyi/">
+                        <span class="tag">fanyi</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/formdata/">
+                        <span class="tag">formdata</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/http/">
+                        <span class="tag">http</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/image-preview/">
+                        <span class="tag">image-preview</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/js/">
+                        <span class="tag">js</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/nginx/">
+                        <span class="tag">nginx</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/node/">
+                        <span class="tag">node</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/plugin/">
+                        <span class="tag">plugin</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/promise/">
+                        <span class="tag">promise</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/react/">
+                        <span class="tag">react</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/socket-io/">
+                        <span class="tag">socket.io</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/vue/">
+                        <span class="tag">vue</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/webpack/">
+                        <span class="tag">webpack</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/blog/">
+                
+                    <img src="/blog/images/logo.svg" alt="前端必须知道的nginx知识" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 zhouatie&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a>
+                
+                <br>
+                <span id="busuanzi_container_site_uv">
+                共<span id="busuanzi_value_site_uv">0</span>个访客
+                </span>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/zhouatie">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+<script>
+var IcarusThemeSettings = {
+    site: {
+        url: 'http://zhouatie.github.io/blog',
+        external_link: {"enable":true,"exclude":[]}
+    },
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+
+
+<script src="/blog/js/animation.js"></script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/blog/js/gallery.js" defer></script>
+
+
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/blog/js/back-to-top.js" defer></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/blog/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/blog/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/blog/js/insight.js" defer></script>
+<link rel="stylesheet" href="/blog/css/search.css">
+<link rel="stylesheet" href="/blog/css/insight.css">
+    
+</body>
+</html>
