@@ -87,26 +87,26 @@
             <div class="navbar-start">
                 
                 <a class="navbar-item is-active"
-                href="/blog/">Home</a>
+                href="/blog/">主页</a>
                 
                 <a class="navbar-item"
-                href="/blog/archives">Archives</a>
+                href="/blog/archives">归档</a>
                 
                 <a class="navbar-item"
-                href="/blog/categories">Categories</a>
+                href="/blog/categories">分类</a>
                 
                 <a class="navbar-item"
-                href="/blog/tags">Tags</a>
+                href="/blog/tags">标签</a>
                 
                 <a class="navbar-item"
-                href="/blog/about">About</a>
+                href="/blog/about">关于</a>
                 
             </div>
             
             <div class="navbar-end">
                 
                     
-                    <a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                    <a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/zhouatie">
                         
                         <i class="fab fa-github"></i>
                         
@@ -131,17 +131,23 @@
     
 <div class="card">
     
+    <div class="card-image">
+        <a href="/blog/2020/03/29/node.js%E5%AE%9E%E7%8E%B0formdata%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" class="image is-7by1">
+            <img class="thumbnail" src="https://s1.ax1x.com/2020/03/29/GZvZJf.png" alt="nodejs实现formdata上传文件">
+        </a>
+    </div>
+    
     <div class="card-content article ">
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2020-03-29T06:38:09.610Z">2020-03-29</time>
+                <time class="level-item has-text-grey" datetime="2020-03-29T10:42:40.380Z">2020-03-29</time>
                 
                 
                 <span class="level-item has-text-grey">
                     
                     
-                    1 分钟 读完 (大约 123 个字)
+                    8 分钟 读完 (大约 1174 个字)
                 </span>
                 
                 
@@ -150,26 +156,23 @@
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/blog/2020/03/29/hello-world/">Hello World</a>
+                <a class="has-link-black-ter" href="/blog/2020/03/29/node.js%E5%AE%9E%E7%8E%B0formdata%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/">nodejs实现formdata上传文件</a>
             
         </h1>
         <div class="content">
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
+            <h3 id="1-关于formdata"><a href="#1-关于formdata" class="headerlink" title="1.关于formdata"></a>1.关于formdata</h3><blockquote>
+<p>XMLHttpRequest Level 2 添加了一个新的接口——FormData。利用 FormData 对象，我们可以通过 JavaScript 用一些键值对来模拟一系列表单控件，我们还可以使用 XMLHttpRequest 的 send() 方法来异步的提交表单。与普通的 Ajax 相比，使用 FormData 的最大优点就是我们可以异步上传二进制文件。<br><a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData">FormData的api</a></p>
+</blockquote>
         </div>
         
+        
+        <div class="level is-mobile">
+            <div class="level-start">
+                <div class="level-item">
+                <a class="button is-size-7 is-light" href="/blog/2020/03/29/node.js%E5%AE%9E%E7%8E%B0formdata%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/#more">阅读更多</a>
+                </div>
+            </div>
+        </div>
         
         
     </div>
@@ -198,22 +201,22 @@
                 <div>
                     
                     <figure class="image is-128x128 has-mb-6">
-                        <img class="" src="/blog/images/avatar.png" alt="Your name">
+                        <img class="" src="/blog/images/avatar.png" alt="zhouatie">
                     </figure>
                     
                     <p class="is-size-4 is-block">
-                        Your name
+                        zhouatie
                     </p>
                     
                     
                     <p class="is-size-6 is-block">
-                        Your title
+                        记录点滴
                     </p>
                     
                     
                     <p class="is-size-6 is-flex is-flex-center has-text-grey">
                         <i class="fas fa-map-marker-alt has-mr-7"></i>
-                        <span>Your location</span>
+                        <span>杭州</span>
                     </p>
                     
                 </div>
@@ -251,7 +254,7 @@
                     </p>
                     <a href="/blog/tags">
                         <p class="title has-text-weight-normal">
-                            0
+                            1
                         </p>
                     </a>
                 </div>
@@ -259,7 +262,7 @@
         </nav>
         
         <div class="level">
-            <a class="level-item button is-link is-rounded" href="https://github.com/ppoffice" target="_blank" rel="noopener">
+            <a class="level-item button is-link is-rounded" href="https://github.com/zhouatie" target="_blank" rel="noopener">
                 关注我</a>
         </div>
         
@@ -268,37 +271,9 @@
         <div class="level is-mobile">
             
             <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
-                title="Github" href="https://github.com/ppoffice">
+                title="Github" href="https://github.com/zhouatie">
                 
                 <i class="fab fa-github"></i>
-                
-            </a>
-            
-            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
-                title="Facebook" href="https://facebook.com">
-                
-                <i class="fab fa-facebook"></i>
-                
-            </a>
-            
-            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
-                title="Twitter" href="https://twitter.com">
-                
-                <i class="fab fa-twitter"></i>
-                
-            </a>
-            
-            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
-                title="Dribbble" href="https://dribbble.com">
-                
-                <i class="fab fa-dribbble"></i>
-                
-            </a>
-            
-            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
-                title="RSS" href="/blog/">
-                
-                <i class="fas fa-rss"></i>
                 
             </a>
             
@@ -329,9 +304,9 @@
             </li>
         
             <li>
-                <a class="level is-mobile" href="https://github.com/ppoffice" target="_blank" rel="noopener">
+                <a class="level is-mobile" href="https://github.com/zhouatie" target="_blank" rel="noopener">
                     <span class="level-left">
-                        <span class="level-item">PPOffice</span>
+                        <span class="level-item">zhouatie</span>
                     </span>
                     <span class="level-right">
                         <span class="level-item tag">github.com</span>
@@ -359,7 +334,14 @@
     </div>
 </div>
     
-        
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/blog/tags/node-formdata/" style="font-size: 10px;">node, formdata</a>
+    </div>
+</div>
     
     
         <div class="column-right-shadow is-hidden-widescreen ">
@@ -372,16 +354,16 @@
         
         <article class="media">
             
-            <a href="/blog/2020/03/29/hello-world/" class="media-left">
+            <a href="/blog/2020/03/29/node.js%E5%AE%9E%E7%8E%B0formdata%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/blog/images/thumbnail.svg" alt="Hello World">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/29/GZvZJf.png" alt="nodejs实现formdata上传文件">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-29T06:38:09.610Z">2020-03-29</time></div>
-                    <a href="/blog/2020/03/29/hello-world/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Hello World</a>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-29T10:42:40.380Z">2020-03-29</time></div>
+                    <a href="/blog/2020/03/29/node.js%E5%AE%9E%E7%8E%B0formdata%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">nodejs实现formdata上传文件</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -423,6 +405,13 @@
                 标签
             </h3>
             <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/node-formdata/">
+                        <span class="tag">node, formdata</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
                 
             </div>
         </div>
@@ -448,16 +437,16 @@
         
         <article class="media">
             
-            <a href="/blog/2020/03/29/hello-world/" class="media-left">
+            <a href="/blog/2020/03/29/node.js%E5%AE%9E%E7%8E%B0formdata%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/blog/images/thumbnail.svg" alt="Hello World">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/29/GZvZJf.png" alt="nodejs实现formdata上传文件">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-29T06:38:09.610Z">2020-03-29</time></div>
-                    <a href="/blog/2020/03/29/hello-world/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Hello World</a>
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-03-29T10:42:40.380Z">2020-03-29</time></div>
+                    <a href="/blog/2020/03/29/node.js%E5%AE%9E%E7%8E%B0formdata%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">nodejs实现formdata上传文件</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -499,6 +488,13 @@
                 标签
             </h3>
             <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/node-formdata/">
+                        <span class="tag">node, formdata</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
                 
             </div>
         </div>
@@ -532,23 +528,7 @@
                 <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
                 
                 <p class="control">
-                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/">
-                        
-                        <i class="fab fa-creative-commons"></i>
-                        
-                    </a>
-                </p>
-                
-                <p class="control">
-                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
-                        
-                        <i class="fab fa-creative-commons-by"></i>
-                        
-                    </a>
-                </p>
-                
-                <p class="control">
-                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/zhouatie">
                         
                         <i class="fab fa-github"></i>
                         
