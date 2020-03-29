@@ -7,20 +7,25 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>归档: 2020 - atie&#39;s blog</title>
+<title>基于react、socket.io、node.js仿微信开发 - atie&#39;s blog</title>
 
 
-    <meta name="description" content="about my front-end and my life">
-<meta property="og:type" content="website">
-<meta property="og:title" content="atie&#39;s blog">
-<meta property="og:url" content="http://zhouatie.github.io/blog/archives/2020/index.html">
+    <meta name="description" content="前言这个项目是我自学 react+redux 的第一个项目，并结合自己之前所学的 node+mongodb，来模仿开发微信客户端。利用每天下班时间边学习边写。由于本人技术水平有限，比较适合新手。目前还没有写完。喜欢的话可以帮忙给我 github 点个 star ^_^">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于react、socket.io、node.js仿微信开发">
+<meta property="og:url" content="http://zhouatie.github.io/blog/2020/03/29/%E5%9F%BA%E4%BA%8Ereact%E3%80%81socket-io%E3%80%81node-js%E4%BB%BF%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/index.html">
 <meta property="og:site_name" content="atie&#39;s blog">
-<meta property="og:description" content="about my front-end and my life">
+<meta property="og:description" content="前言这个项目是我自学 react+redux 的第一个项目，并结合自己之前所学的 node+mongodb，来模仿开发微信客户端。利用每天下班时间边学习边写。由于本人技术水平有限，比较适合新手。目前还没有写完。喜欢的话可以帮忙给我 github 点个 star ^_^">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://zhouatie.github.io/blog/images/og_image.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/30/GZzE28.png">
+<meta property="article:published_time" content="2020-03-29T15:52:24.000Z">
+<meta property="article:modified_time" content="2020-03-29T16:07:13.770Z">
 <meta property="article:author" content="zhouatie">
+<meta property="article:tag" content="react">
+<meta property="article:tag" content="node">
+<meta property="article:tag" content="socket.io">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://zhouatie.github.io/blog/images/og_image.png">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/03/30/GZzE28.png">
 
 
 
@@ -78,7 +83,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/blog/">
             
-                <img src="/blog/images/logo.svg" alt="atie&#39;s blog" height="28">
+                <img src="/blog/images/logo.svg" alt="基于react、socket.io、node.js仿微信开发" height="28">
             
             </a>
         </div>
@@ -128,124 +133,180 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-image">
+        <span  class="image is-7by1">
+            <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GZzE28.png" alt="基于react、socket.io、node.js仿微信开发">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-03-29T15:52:24.000Z">2020-03-29</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    6 分钟 读完 (大约 970 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                基于react、socket.io、node.js仿微信开发
+            
+        </h1>
+        <div class="content">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这个项目是我自学 react+redux 的第一个项目，并结合自己之前所学的 node+mongodb，来模仿开发微信客户端。利用每天下班时间边学习边写。由于本人技术水平有限，比较适合新手。目前还没有写完。喜欢的话可以帮忙给我 github 点个 star ^_^</p>
+<a id="more"></a>
 
-<div class="card widget">
+<h2 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h2><p><a href="https://github.com/zhouatie/wechat">https://github.com/zhouatie/wechat</a></p>
+<h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><p>react+redux+react-router4+socket.io+axios+node.js+mongodb</p>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">本地启动mongodb服务</span><br><span class="line">分别进入wechat跟server文件夹npm install</span><br><span class="line">wechat里npm run start</span><br><span class="line">server里node app.js 和 chat.js 这两个文件</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>开发环境：macbook pro 、vscode、Chrome、node</p>
+</blockquote>
+<blockquote>
+<p>如果 npm install 太慢导致有些 npm 依赖包下载失败 你可以看控制台的报错信息，再手动 npm install 具体的开发包，推荐使用淘宝的注册源，直接运行</p>
+</blockquote>
+<p><code>npm install -g cnpm --registry=https://registry.npm.taobao.org</code></p>
+<h2 id="目标功能"><a href="#目标功能" class="headerlink" title="目标功能"></a>目标功能</h2><ul>
+<li>[√] 注册</li>
+<li>[√] 登录</li>
+<li>[√] 添加好友</li>
+<li>[√] 支持私聊</li>
+<li>[√] 消息列表的展示</li>
+<li>[√] 未读消息数量的显示</li>
+<li>[√] axios 数据跨域的设置</li>
+<li><input disabled="" type="checkbox"> 群聊</li>
+<li>[√] 上传头像</li>
+<li>[√] 个人信息的编辑</li>
+<li><input disabled="" type="checkbox"> 朋友圈</li>
+</ul>
+<h2 id="部分截图"><a href="#部分截图" class="headerlink" title="部分截图"></a>部分截图</h2><p><img src="https://github.com/zhouatie/wechat/raw/master/data/wechat_2018-01-14.gif" alt="私聊"></p>
+<p><img src="https://github.com/zhouatie/wechat/raw/master/data/uploadLogo2018011501.gif" alt="上传头像"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>1.之前写 vue 项目的时候，在 main.js 文件中写 express 接口，就行了，就不存在跨域问题。在 create-react-app 启动的静态资源服务中，实在找不到哪里可以写接口，找了好久的 node_modules ，都不知道在哪里下手。好在 create-react-app 中的 package.json 中加上：<code>proxy:http://localhost:4000</code>就能解决跨域问题了。</p>
+<p>2.在 app.js 页面中，使用的是 express 框架，写 socket.io 不知道为什么会提醒跨域问题，而我前面的登录接口用 axios 跨域就没有问题，而且我在 express 的头部做了 CORS 处理，还是存在跨域问题。所以只能另启了一个 node 服务，采用原生 node.js 编写，跨域就成功了。但是我在新写的服务中，换成用 express 框架，结果也提示了存在跨域问题。目前个人猜测 express 可能有什么跨域机制。</p>
+<p>3.在引入 react-router4 的时候遇到了很多疑难杂症，晚上大部分的 react-router4 一下的版本。按照网上来做，好多报错，到处找博客找文章。后来通过 react-router 英文文档的阅读解决了各种报错问题。</p>
+<p>4.我是通过 redux 来更新消息列表，中间出现 store 数据更新了，组件却不渲染。后来求助好友后，原来是我强制修改了 state 导致页面无法即使刷新。</p>
+<p>5.formdata 上传文件，相当于表单上传，头部为<code>Content-Type:multipart/form-data</code>,这点要注意了！</p>
+<blockquote>
+<p>注意: Multer 不会处理任何非 multipart/form-data 类型的表单数据。具体见 <a href="https://www.npmjs.com/package/multer">multer</a></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> multer = <span class="built_in">require</span>(<span class="string">'multer'</span>);</span><br><span class="line"><span class="keyword">var</span> upload = multer(&#123; <span class="attr">dest</span>: <span class="string">'../wechat/public/logos'</span> &#125;); <span class="comment">// dest 指的是图片存到哪个文件夹里</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 上传头像</span></span><br><span class="line">app.post(<span class="string">'/uploadLogo'</span>, upload.single(<span class="string">'avatar'</span>), (req, res) =&gt; &#123;</span><br><span class="line">	User.update(</span><br><span class="line">		&#123; <span class="attr">_id</span>: req.body.id &#125;,</span><br><span class="line">		&#123; <span class="attr">$set</span>: &#123; <span class="attr">logo</span>: <span class="string">'./logos/'</span> + req.file.filename &#125; &#125;,</span><br><span class="line">		<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">			res.send(&#123;</span><br><span class="line">				status: <span class="string">'success'</span>,</span><br><span class="line">				url: <span class="string">'./logos/'</span> + req.file.filename</span><br><span class="line">			&#125;);</span><br><span class="line">		&#125;</span><br><span class="line">	);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>《深入浅出 React 和 Redux》– 程墨</p>
+<p>《MongoDB 实战（第二版）》</p>
+<p><a href="https://reacttraining.com/react-router/web/guides/philosophy">react-router</a></p>
+<p><a href="https://reactjs.org/docs/hello-world.html">react</a></p>
+<p><a href="http://www.redux.org.cn/index.html">redux 中文文档</a></p>
+<p><a href="http://www.nodeclass.com/api/mongoose.html#guide_connections">mongoose</a></p>
+<p><a href="https://juejin.im/entry/5923e2242f301e006b2a7827">基于 Vue、Nodejs、Socket.io 的聊天应用</a></p>
+<p><a href="https://www.npmjs.com/package/multer">multer</a></p>
+<blockquote>
+<p>文章都是学习过程中的总结，如果发现错误，欢迎留言指出</p>
+</blockquote>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/blog/tags/node/" rel="tag">node</a>, <a class="has-link-grey -link" href="/blog/tags/react/" rel="tag">react</a>, <a class="has-link-grey -link" href="/blog/tags/socket-io/" rel="tag">socket.io</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
     <div class="card-content">
-        <h3 class="tag is-link">
-        2020
-        </h3>
-        <div class="timeline">
-        
-            <article class="media">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
                 
-                <a href="/blog/2020/03/30/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%89%E6%8B%A9%E5%99%A8%E6%8F%92%E4%BB%B6/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/Ge95J1.png" alt="原生js实现移动端选择器插件">
-                    </p>
-                </a>
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="https://s1.ax1x.com/2020/03/29/GVxai6.png" alt="支付宝"></div>
+</a>
+
                 
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2020-03-29T16:18:48.000Z">2020-03-30</time>
-                        <a href="/blog/2020/03/30/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%89%E6%8B%A9%E5%99%A8%E6%8F%92%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">原生js实现移动端选择器插件</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
                 
-                <a href="/blog/2020/03/30/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E6%8B%96%E6%8B%BD%E7%BC%A9%E6%94%BE%E9%A2%84%E8%A7%88%E5%9B%BE%E7%89%87%E6%8F%92%E4%BB%B6/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeS6f0.png" alt="原生js实现拖拽缩放预览图片插件">
-                    </p>
-                </a>
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="https://s1.ax1x.com/2020/03/29/GVzAfK.png" alt="微信"></div>
+</a>
+
                 
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2020-03-29T16:12:12.000Z">2020-03-30</time>
-                        <a href="/blog/2020/03/30/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E6%8B%96%E6%8B%BD%E7%BC%A9%E6%94%BE%E9%A2%84%E8%A7%88%E5%9B%BE%E7%89%87%E6%8F%92%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">原生js实现拖拽缩放预览图片插件</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
-                
-                <a href="/blog/2020/03/30/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E7%9C%81%E5%B8%82%E5%8C%BA%E4%B8%89%E7%BA%A7%E8%81%94%E5%8A%A8%E6%8F%92%E4%BB%B6/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeSKyD.png" alt="原生js实现省市区三级联动插件">
-                    </p>
-                </a>
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2020-03-29T16:08:21.000Z">2020-03-30</time>
-                        <a href="/blog/2020/03/30/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E7%9C%81%E5%B8%82%E5%8C%BA%E4%B8%89%E7%BA%A7%E8%81%94%E5%8A%A8%E6%8F%92%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">原生js实现省市区三级联动插件</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
-                
-                <a href="/blog/2020/03/29/%E5%9F%BA%E4%BA%8Ereact%E3%80%81socket-io%E3%80%81node-js%E4%BB%BF%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GZzE28.png" alt="基于react、socket.io、node.js仿微信开发">
-                    </p>
-                </a>
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2020-03-29T15:52:24.000Z">2020-03-29</time>
-                        <a href="/blog/2020/03/29/%E5%9F%BA%E4%BA%8Ereact%E3%80%81socket-io%E3%80%81node-js%E4%BB%BF%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" class="title has-link-black-ter is-size-6 has-text-weight-normal">基于react、socket.io、node.js仿微信开发</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
-                
-                <a href="/blog/2020/03/29/node.js%E5%AE%9E%E7%8E%B0formdata%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/29/GZvZJf.png" alt="nodejs实现formdata上传文件">
-                    </p>
-                </a>
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2020-03-29T10:42:40.380Z">2020-03-29</time>
-                        <a href="/blog/2020/03/29/node.js%E5%AE%9E%E7%8E%B0formdata%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">nodejs实现formdata上传文件</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
         </div>
     </div>
 </div>
 
 
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/blog/2020/03/30/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E7%9C%81%E5%B8%82%E5%8C%BA%E4%B8%89%E7%BA%A7%E8%81%94%E5%8A%A8%E6%8F%92%E4%BB%B6/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">原生js实现省市区三级联动插件</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/blog/2020/03/29/node.js%E5%AE%9E%E7%8E%B0formdata%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/">
+                <span class="level-item">nodejs实现formdata上传文件</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="valine-thread" class="content"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#valine-thread' ,
+        notify: false,
+        verify: false,
+        app_id: '6wph3PoS8fVVU86A0GoJPvbu-gzGzoHsz',
+        app_key: 'N6A70pqCwTUE03HESBBPHAIu',
+        placeholder: '请输入'
+    });
+</script>
+
+    </div>
+</div>
 </div>
                 
 
@@ -796,7 +857,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/blog/">
                 
-                    <img src="/blog/images/logo.svg" alt="atie&#39;s blog" height="28">
+                    <img src="/blog/images/logo.svg" alt="基于react、socket.io、node.js仿微信开发" height="28">
                 
                 </a>
                 <p class="is-size-7">

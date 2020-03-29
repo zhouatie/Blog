@@ -7,20 +7,22 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>归档: 2020 - atie&#39;s blog</title>
+<title>原生js实现移动端选择器插件 - atie&#39;s blog</title>
 
 
-    <meta name="description" content="about my front-end and my life">
-<meta property="og:type" content="website">
-<meta property="og:title" content="atie&#39;s blog">
-<meta property="og:url" content="http://zhouatie.github.io/blog/archives/2020/index.html">
+    <meta name="description" content="前言插件功能只满足我司业务需求，如果希望有更多功能的，可在下方留言，我尽量扩展！如果你有需要或者喜欢的话，可以给我 github 来个 star ?">
+<meta property="og:type" content="article">
+<meta property="og:title" content="原生js实现移动端选择器插件">
+<meta property="og:url" content="http://zhouatie.github.io/blog/2020/03/30/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%89%E6%8B%A9%E5%99%A8%E6%8F%92%E4%BB%B6/index.html">
 <meta property="og:site_name" content="atie&#39;s blog">
-<meta property="og:description" content="about my front-end and my life">
+<meta property="og:description" content="前言插件功能只满足我司业务需求，如果希望有更多功能的，可在下方留言，我尽量扩展！如果你有需要或者喜欢的话，可以给我 github 来个 star ?">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://zhouatie.github.io/blog/images/og_image.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/30/Ge95J1.png">
+<meta property="article:published_time" content="2020-03-29T16:18:48.000Z">
+<meta property="article:modified_time" content="2020-03-29T16:23:47.771Z">
 <meta property="article:author" content="zhouatie">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://zhouatie.github.io/blog/images/og_image.png">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/03/30/Ge95J1.png">
 
 
 
@@ -78,7 +80,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/blog/">
             
-                <img src="/blog/images/logo.svg" alt="atie&#39;s blog" height="28">
+                <img src="/blog/images/logo.svg" alt="原生js实现移动端选择器插件" height="28">
             
             </a>
         </div>
@@ -128,124 +130,152 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-image">
+        <span  class="image is-7by1">
+            <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/Ge95J1.png" alt="原生js实现移动端选择器插件">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-03-29T16:18:48.000Z">2020-03-30</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    4 分钟 读完 (大约 671 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                原生js实现移动端选择器插件
+            
+        </h1>
+        <div class="content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>插件功能只满足我司业务需求，如果希望有更多功能的，可在下方留言，我尽量扩展！如果你有需要或者喜欢的话，可以给我 github 来个 star ?</p>
+<a id="more"></a>
 
-<div class="card widget">
+<blockquote>
+<p><a href="https://github.com/zhouatie/plugin/tree/master/pickerView">仓库地址</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://zhouatie.github.io/plugin/pickerView/pickerView.html">在线预览(记得将浏览器切换到手机模式)</a></p>
+</blockquote>
+<h3 id="预览"><a href="#预览" class="headerlink" title="预览"></a>预览</h3><p><img src="https://github.com/zhouatie/plugin/raw/master/pickerView/data/pickerView2.gif" alt="省市区"></p>
+<h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>首先在页面中引入 css,js 文件</p>
+<p>每次需要弹出该组件时通过 new 一个实例来生成，代码如下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> data = &#123;</span><br><span class="line">    <span class="number">1</span>:&#123;</span><br><span class="line">      <span class="number">2</span>:[<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> pickerView = <span class="keyword">new</span> PickerView(&#123;</span><br><span class="line">    bindElem: elem, <span class="comment">// 绑定的元素,用于区别多个组件存在时回显区别，如果单个可以随意填某个元素</span></span><br><span class="line">    data: data, <span class="comment">// 说明：该参数必须符合json格式 且最里层是个数组，如上面的data变量所展示的[3,4]。</span></span><br><span class="line">    title: <span class="string">'标题2'</span>, <span class="comment">// 顶部标题文本 默认为“标题”</span></span><br><span class="line">    leftText: <span class="string">'取消'</span>, <span class="comment">// 头部左侧按钮文本 默认为‘取消’</span></span><br><span class="line">    rightText: <span class="string">'确定'</span>, <span class="comment">// 头部右侧按钮文本 默认为“确定”</span></span><br><span class="line">    rightFn: <span class="function"><span class="keyword">function</span>(<span class="params"> selectArr </span>)</span>&#123;  <span class="comment">// 点击头部右侧按钮的回调函数，参数为一个数组，数组对应滚轮中每项对应的值</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>字段介绍如上注释，滚轮的数量取决于你 json 嵌套的层数。如下：</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> data = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/zhouatie/plugin/raw/master/pickerView/data/img1.png" alt="data1"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> data = &#123;</span><br><span class="line">    <span class="string">"小明家"</span>:[<span class="string">"小明爸爸"</span>,<span class="string">"小明妈妈"</span>,<span class="string">"小明爷爷"</span>,<span class="string">"小明奶奶"</span>,<span class="string">"小明爸爸"</span>,<span class="string">"小明妈妈"</span>,<span class="string">"小明爷爷"</span>,<span class="string">"小明奶奶"</span>],</span><br><span class="line">    <span class="string">"小红家"</span>:[<span class="string">"小红爸爸"</span>,<span class="string">"小红妈妈"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/zhouatie/plugin/raw/master/pickerView/data/img2.png" alt="data2"></p>
+<h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- html --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">style</span>=<span class="string">"font-size:50px;"</span> <span class="attr">id</span>=<span class="string">"btn"</span>&gt;</span>按钮<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"showText"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>button 标签是用来每次点击的时候打开组件</p>
+</blockquote>
+<blockquote>
+<p>div 标签用来展示选择的内容</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//js</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// var data = 地级市json数据，过大 就不展示了</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> data = &#123;</span><br><span class="line">    <span class="string">"小明家"</span>:&#123;</span><br><span class="line">      <span class="string">"小明爸爸"</span>:[<span class="number">1</span>,<span class="number">2</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">0</span>,<span class="number">6</span>,<span class="number">98</span>,<span class="number">76</span>,<span class="number">5</span>],</span><br><span class="line">      <span class="string">"小明妈妈"</span>:[<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"小红家"</span>:&#123;</span><br><span class="line">      <span class="string">"小红爸爸"</span>:[<span class="number">5</span>,<span class="number">6</span>],</span><br><span class="line">      <span class="string">"小红妈妈"</span>:[<span class="number">7</span>,<span class="number">8</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> btn = <span class="built_in">document</span>.getElementById(<span class="string">"btn"</span>);</span><br><span class="line">btn.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> pickerView = <span class="keyword">new</span> PickerView(&#123;</span><br><span class="line">      bindElem: btn,</span><br><span class="line">      data: data,</span><br><span class="line">      title: <span class="string">'家庭'</span>,</span><br><span class="line">      leftText: <span class="string">'取消'</span>,</span><br><span class="line">      rightText: <span class="string">'确定'</span>,</span><br><span class="line">      rightFn: <span class="function"><span class="keyword">function</span>(<span class="params"> selectArr </span>)</span>&#123;</span><br><span class="line">          <span class="built_in">console</span>.log(selectArr,<span class="string">'selectarr'</span>);</span><br><span class="line">          <span class="comment">// 将家庭成员展示到showText类名的div中</span></span><br><span class="line">          <span class="built_in">document</span>.querySelector(<span class="string">".showText"</span>).innerText = selectArr.join(<span class="string">"-"</span>);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>说明： 每次显示组件的时候都需要 new 一个实例，如上 button 标签每次被点击的时候都 new 一个。效果如下：</p>
+</blockquote>
+<p><img src="https://github.com/zhouatie/plugin/raw/master/pickerView/data/img4.png" alt="预览"></p>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>如有什么功能需要增加的，可在评论区留言，我尽量满足。如有什么疏忽或错误，希望您指出。我会尽早修改，以免误导他人。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
     <div class="card-content">
-        <h3 class="tag is-link">
-        2020
-        </h3>
-        <div class="timeline">
-        
-            <article class="media">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
                 
-                <a href="/blog/2020/03/30/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%89%E6%8B%A9%E5%99%A8%E6%8F%92%E4%BB%B6/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/Ge95J1.png" alt="原生js实现移动端选择器插件">
-                    </p>
-                </a>
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="https://s1.ax1x.com/2020/03/29/GVxai6.png" alt="支付宝"></div>
+</a>
+
                 
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2020-03-29T16:18:48.000Z">2020-03-30</time>
-                        <a href="/blog/2020/03/30/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%89%E6%8B%A9%E5%99%A8%E6%8F%92%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">原生js实现移动端选择器插件</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
                 
-                <a href="/blog/2020/03/30/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E6%8B%96%E6%8B%BD%E7%BC%A9%E6%94%BE%E9%A2%84%E8%A7%88%E5%9B%BE%E7%89%87%E6%8F%92%E4%BB%B6/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeS6f0.png" alt="原生js实现拖拽缩放预览图片插件">
-                    </p>
-                </a>
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="https://s1.ax1x.com/2020/03/29/GVzAfK.png" alt="微信"></div>
+</a>
+
                 
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2020-03-29T16:12:12.000Z">2020-03-30</time>
-                        <a href="/blog/2020/03/30/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E6%8B%96%E6%8B%BD%E7%BC%A9%E6%94%BE%E9%A2%84%E8%A7%88%E5%9B%BE%E7%89%87%E6%8F%92%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">原生js实现拖拽缩放预览图片插件</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
-                
-                <a href="/blog/2020/03/30/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E7%9C%81%E5%B8%82%E5%8C%BA%E4%B8%89%E7%BA%A7%E8%81%94%E5%8A%A8%E6%8F%92%E4%BB%B6/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeSKyD.png" alt="原生js实现省市区三级联动插件">
-                    </p>
-                </a>
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2020-03-29T16:08:21.000Z">2020-03-30</time>
-                        <a href="/blog/2020/03/30/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E7%9C%81%E5%B8%82%E5%8C%BA%E4%B8%89%E7%BA%A7%E8%81%94%E5%8A%A8%E6%8F%92%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">原生js实现省市区三级联动插件</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
-                
-                <a href="/blog/2020/03/29/%E5%9F%BA%E4%BA%8Ereact%E3%80%81socket-io%E3%80%81node-js%E4%BB%BF%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GZzE28.png" alt="基于react、socket.io、node.js仿微信开发">
-                    </p>
-                </a>
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2020-03-29T15:52:24.000Z">2020-03-29</time>
-                        <a href="/blog/2020/03/29/%E5%9F%BA%E4%BA%8Ereact%E3%80%81socket-io%E3%80%81node-js%E4%BB%BF%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/" class="title has-link-black-ter is-size-6 has-text-weight-normal">基于react、socket.io、node.js仿微信开发</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
-                
-                <a href="/blog/2020/03/29/node.js%E5%AE%9E%E7%8E%B0formdata%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/29/GZvZJf.png" alt="nodejs实现formdata上传文件">
-                    </p>
-                </a>
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2020-03-29T10:42:40.380Z">2020-03-29</time>
-                        <a href="/blog/2020/03/29/node.js%E5%AE%9E%E7%8E%B0formdata%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">nodejs实现formdata上传文件</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
         </div>
     </div>
 </div>
 
 
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/blog/2020/03/30/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E6%8B%96%E6%8B%BD%E7%BC%A9%E6%94%BE%E9%A2%84%E8%A7%88%E5%9B%BE%E7%89%87%E6%8F%92%E4%BB%B6/">
+                <span class="level-item">原生js实现拖拽缩放预览图片插件</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="valine-thread" class="content"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#valine-thread' ,
+        notify: false,
+        verify: false,
+        app_id: '6wph3PoS8fVVU86A0GoJPvbu-gzGzoHsz',
+        app_key: 'N6A70pqCwTUE03HESBBPHAIu',
+        placeholder: '请输入'
+    });
+</script>
+
+    </div>
+</div>
 </div>
                 
 
@@ -796,7 +826,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/blog/">
                 
-                    <img src="/blog/images/logo.svg" alt="atie&#39;s blog" height="28">
+                    <img src="/blog/images/logo.svg" alt="原生js实现移动端选择器插件" height="28">
                 
                 </a>
                 <p class="is-size-7">
