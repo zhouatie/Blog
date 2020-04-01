@@ -7,20 +7,24 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>归档: 2018 - atie&#39;s blog</title>
+<title>docker从零搭建jenkins - atie&#39;s blog</title>
 
 
-    <meta name="description" content="about my front-end and my life">
-<meta property="og:type" content="website">
-<meta property="og:title" content="atie&#39;s blog">
-<meta property="og:url" content="http://zhouatie.github.io/blog/archives/2018/index.html">
+    <meta name="description" content="前言写这篇文章的灵感来源于最近公司的 jenkins 部署老是失败，各种原因。在项目非常赶的情况下，我每天还要抽半天时间去排查 jenkins 上的问题。所以决定在我们前端服务器上搭建个 jenkins 给测试部署。并部署到前端服务器上。文章是边操作边写出来的，踩遍了坑。不知道大家会不会也遇到这些问题。反正我都把解决步骤写在里面了。 本文主要内容是介绍 jenkins 的搭建与使用。至于是安装在服">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker从零搭建jenkins">
+<meta property="og:url" content="http://zhouatie.github.io/blog/2020/04/02/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BAjenkins/index.html">
 <meta property="og:site_name" content="atie&#39;s blog">
-<meta property="og:description" content="about my front-end and my life">
+<meta property="og:description" content="前言写这篇文章的灵感来源于最近公司的 jenkins 部署老是失败，各种原因。在项目非常赶的情况下，我每天还要抽半天时间去排查 jenkins 上的问题。所以决定在我们前端服务器上搭建个 jenkins 给测试部署。并部署到前端服务器上。文章是边操作边写出来的，踩遍了坑。不知道大家会不会也遇到这些问题。反正我都把解决步骤写在里面了。 本文主要内容是介绍 jenkins 的搭建与使用。至于是安装在服">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://zhouatie.github.io/blog/images/og_image.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/04/02/GGPu79.jpg">
+<meta property="article:published_time" content="2020-04-01T20:16:41.000Z">
+<meta property="article:modified_time" content="2020-04-01T20:18:01.142Z">
 <meta property="article:author" content="zhouatie">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="jenkins">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://zhouatie.github.io/blog/images/og_image.png">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/04/02/GGPu79.jpg">
 
 
 
@@ -78,7 +82,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/blog/">
             
-                <img src="/blog/images/logo.svg" alt="atie&#39;s blog" height="28">
+                <img src="/blog/images/logo.svg" alt="docker从零搭建jenkins" height="28">
             
             </a>
         </div>
@@ -128,287 +132,210 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-image">
+        <span  class="image is-7by1">
+            <img class="thumbnail" src="https://s1.ax1x.com/2020/04/02/GGPu79.jpg" alt="docker从零搭建jenkins">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-04-01T20:16:41.000Z">2020-04-02</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/blog/categories/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/">持续集成</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    9 分钟 读完 (大约 1406 个字)
+                </span>
+                
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span>次访问
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                docker从零搭建jenkins
+            
+        </h1>
+        <div class="content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>写这篇文章的灵感来源于最近公司的 jenkins 部署老是失败，各种原因。在项目非常赶的情况下，我每天还要抽半天时间去排查 jenkins 上的问题。所以决定在我们前端服务器上搭建个 jenkins 给测试部署。并部署到前端服务器上。文章是边操作边写出来的，踩遍了坑。不知道大家会不会也遇到这些问题。反正我都把解决步骤写在里面了。</p>
+<p>本文主要内容是介绍 jenkins 的搭建与使用。至于是安装在服务器上还是本文通过 docker 安装 jenkins 不是很重要，默认读者会使用 docker。如果不是很了解<code>docker</code>可看我的<a href="https://zhouatie.github.io/blog/2019/07/07/docker从入门到实战-基础篇/">docker 从入门到实战</a>博客</p>
+<a id="more"></a>
 
-<div class="card widget">
+<h2 id="安装-jenkins"><a href="#安装-jenkins" class="headerlink" title="安装 jenkins"></a>安装 jenkins</h2><p><code>docker pull docker.io/jenkins/jenkins:latest</code></p>
+<p>安装成功后使用<code>docker images</code>查看镜像</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">github docker images</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">jenkins/jenkins     latest              59f8784e08ee        2 days ago          619MB</span><br></pre></td></tr></table></figure>
+
+<p>在启动 Jenkins 前，需要先创建一个 Jenkins 的配置目录，并且挂载到 docker 里的 Jenkins 目录下</p>
+<p>新建一个文件夹如我的<code>/Users/zhouatie/Desktop/github/front-end/practise-jenkins</code></p>
+<p>并给该文件夹授权<code>sudo chown -R 1000 /Users/zhouatie/Desktop/github/front-end/practise-jenkins</code></p>
+<blockquote>
+<p>这里有个很神奇的点就是网上都说要授权，所以我授权了，但是还是提示<code>Can not write to /var/jenkins_home/copy_reference_file.log. Wrong volume permissions</code>。后来我新建了个文件夹不做授权处理就可以了。可查阅<a href="https://github.com/jenkinsci/docker/issues/177">stackoverflow</a> 这里面一位朋友就是遇到相同的问题 授权了也没用。</p>
+</blockquote>
+<p>执行以下命令构建容器</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd -p 8080:8080 -p 50000:50000 --name jenkins  -v /Users/zhouatie/Desktop/github/front-end/practise-jenkins:/var/jenkins_home docker.io/jenkins/jenkins:latest</span><br></pre></td></tr></table></figure>
+
+<p>执行<code>docker ps</code>查看后台启动的容器情况</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜  front-end git:(master) ✗ docker ps</span><br><span class="line">CONTAINER ID        IMAGE                    COMMAND                  CREATED             STATUS              PORTS                                              NAMES</span><br><span class="line">3385ad0e42fe        jenkins/jenkins:latest   "/sbin/tini -- /usr/…"   5 minutes ago       Up 5 minutes        0.0.0.0:8080-&gt;8080/tcp, 0.0.0.0:50000-&gt;50000/tcp   jenkins</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 jenkins 容器已经启动成功了。这个时候访问下页面吧。浏览器输入 <code>localhost:8080</code></p>
+<p>可以看到如下界面</p>
+<img src="https://s1.ax1x.com/2020/04/02/G8xocQ.jpg" alt="G8xocQ.jpg" style="zoom:50%;" />
+
+<p>这个时候我们就可以到刚才管理数据卷的文件夹里找了(我本地是<code>/Users/zhouatie/Desktop/github/front-end/practise-jenkins/secrets/initialAdminPassword</code>)，<code>cat</code>下这个文件可以看到输出<code>28023d3751214bd6aadc0dd83c168325</code>，把这个密码复制到管理员密码输入框中并点击继续。</p>
+<p>loading 转了半天，有种不详的预感。结果不出意外显示 jenkins 离线。所以我又开始上网搜<a href="https://yq.aliyun.com/articles/347536">新版本 jenkins 安装时显示离线问题</a></p>
+<p>解决步骤</p>
+<ol>
+<li><p>浏览器输入<code>http://localhost:8080/pluginManager/advanced</code></p>
+<p>划到最下面可以看到</p>
+<p><a href="https://imgchr.com/i/G8zfbR"><img src="https://s1.ax1x.com/2020/04/02/G8zfbR.md.jpg" alt="G8zfbR.md.jpg"></a></p>
+</li>
+<li><p>将截图中的地址替换为<code>http://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/current/update-center.json</code>这个代理服务器</p>
+</li>
+</ol>
+<p>再刷新下<code>http://localhost:8080</code>页面如下</p>
+<p><img src="https://s1.ax1x.com/2020/04/02/G8zvVI.jpg" alt="G8zvVI.jpg"></p>
+<ol start="3">
+<li><p>点击安装推荐的插件</p>
+<p>结果不出意外如下图</p>
+<p><img src="https://s1.ax1x.com/2020/04/02/GGpocD.jpg" alt="GGpocD.jpg"></p>
+<p>然后我又开始<code>google</code>了。找到了这个<a href="https://www.cnblogs.com/changjianblog/p/10916098.html">安装 jenkins 时出现 No such plugin: cloudbees-folder 的解决办法</a></p>
+<p>结果按照前几个步骤失败，作者建议重启，好吧，重启就重启，执行下 <code>docker restart jenkins</code></p>
+<p>终于又成功进入下载页了。</p>
+<blockquote>
+<p>安装真的超级慢，心急如焚，不知道是不是 docker 的原因。因为文章是直接边操作边写的。在想要不要直接跨过这个安装界面，直接打开自己跑在前端服务器上的 jenkins 了开始介绍了</p>
+</blockquote>
+</li>
+</ol>
+<p><img src="https://s1.ax1x.com/2020/04/02/GGpdkq.jpg" alt="GGpdkq.jpg"></p>
+<p>还没等他提示完全失败，这个时候我就又开始<code>google</code>了。实在没辙了，这的太难了。所以我重启了个<code>jenkins</code>容器后，选择自选插件。然后什么也不选，进了页面后，可以在如下截图地方下载，我是将上面推荐的全部勾选后进行下载，结果还很快。</p>
+<p><img src="https://s1.ax1x.com/2020/04/02/GGCv6S.jpg" alt="GGCv6S.jpg"></p>
+<ol start="4">
+<li><p>安装完插件后重启下，可以看到界面如下</p>
+<p><img src="https://s1.ax1x.com/2020/04/02/GGPpwj.jpg" alt="GGPpwj.jpg"></p>
+</li>
+</ol>
+<h2 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h2><ol>
+<li>点击右上角的新建任务</li>
+</ol>
+<img style="max-width: 50%;float: left;" src="https://s1.ax1x.com/2020/04/02/GGP9Ts.jpg" alt="GGP9Ts.jpg" border="0" />
+
+<ol>
+<li><p>选择第一个自由风格模式</p>
+<img style="max-width: 50%;float: left;" src="https://s1.ax1x.com/2020/04/02/GGPPkn.jpg" alt="GGPPkn.jpg" border="0" />
+</li>
+<li><p>确点后进入如下页面，并点击配置</p>
+<img style="max-width: 50%;float: left;" src="https://s1.ax1x.com/2020/04/02/GGPV6U.jpg" alt="GGPV6U.jpg" border="0" />
+</li>
+<li><p>因为部分插件装失败了，我就以在装成功的 jenkins 配置界面截图为例</p>
+<img src="https://s1.ax1x.com/2020/04/02/GGPmm4.jpg" alt="GGPmm4.jpg" border="0" />
+</li>
+</ol>
+<ul>
+<li><strong>参数化构建</strong>：这里主要提下参数化构建，这里对应的值都可以在下面【构建】执行 shell 中获取到部署的时候用户手动选择或者填入的参数。</li>
+<li><strong>源码管理</strong>：主要是让 jenkins 从你的 git 仓库中拉代码，<code>credentials</code>需要选择有该仓库权限的账号，可以手动试下</li>
+<li><strong>构建触发器</strong>：意思就是触发条件，比如<code>git</code>上的<code>webhook</code>，就可以触发<code>jenkins</code>部署。具体可查阅<code>google</code></li>
+<li><strong>构建</strong>：这个是重点，这里可以执行你的脚本，比如你是一个 vue 项目，可以根据上面配置的参数化配置，获取是否需要安装依赖等。可看我图中<code>shell</code>脚本，非常好理解。</li>
+</ul>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/blog/tags/docker/" rel="tag">docker</a>, <a class="has-link-grey -link" href="/blog/tags/jenkins/" rel="tag">jenkins</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
     <div class="card-content">
-        <h3 class="tag is-link">
-        2018
-        </h3>
-        <div class="timeline">
-        
-            <article class="media">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
                 
-                <a href="/blog/2018/11/12/%E9%98%BB%E6%AD%A2%E4%B8%AD%E6%96%87%E8%BE%93%E5%85%A5%E6%B3%95%E8%BE%93%E5%85%A5%E6%8B%BC%E9%9F%B3%E7%9A%84%E6%97%B6%E5%80%99%E8%A7%A6%E5%8F%91input%E4%BA%8B%E4%BB%B6/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GenCZt.png" alt="阻止中文输入法输入拼音的时候触发input事件">
-                    </p>
-                </a>
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="https://s1.ax1x.com/2020/03/29/GVxai6.png" alt="支付宝"></div>
+</a>
+
                 
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2018-11-11T17:12:21.000Z">2018-11-12</time>
-                        <a href="/blog/2018/11/12/%E9%98%BB%E6%AD%A2%E4%B8%AD%E6%96%87%E8%BE%93%E5%85%A5%E6%B3%95%E8%BE%93%E5%85%A5%E6%8B%BC%E9%9F%B3%E7%9A%84%E6%97%B6%E5%80%99%E8%A7%A6%E5%8F%91input%E4%BA%8B%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">阻止中文输入法输入拼音的时候触发input事件</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
                 
-                <a href="/blog/2018/09/11/%E9%85%8D%E7%BD%AEnginx%E8%A7%A3%E5%86%B3vue%E8%B7%AF%E7%94%B1history%E6%A8%A1%E5%BC%8F%E4%B8%8B%E5%88%B7%E6%96%B0404%E9%97%AE%E9%A2%98/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GemqIK.png" alt="配置nginx解决vue路由history模式下刷新404问题">
-                    </p>
-                </a>
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="https://s1.ax1x.com/2020/03/29/GVzAfK.png" alt="微信"></div>
+</a>
+
                 
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2018-09-10T17:08:44.000Z">2018-09-11</time>
-                        <a href="/blog/2018/09/11/%E9%85%8D%E7%BD%AEnginx%E8%A7%A3%E5%86%B3vue%E8%B7%AF%E7%94%B1history%E6%A8%A1%E5%BC%8F%E4%B8%8B%E5%88%B7%E6%96%B0404%E9%97%AE%E9%A2%98/" class="title has-link-black-ter is-size-6 has-text-weight-normal">配置nginx解决vue路由history模式下刷新404问题</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
-                
-                <a href="/blog/2018/09/10/vue%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GemgaV.png" alt="vue响应式原理">
-                    </p>
-                </a>
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2018-09-09T17:05:28.000Z">2018-09-10</time>
-                        <a href="/blog/2018/09/10/vue%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/" class="title has-link-black-ter is-size-6 has-text-weight-normal">vue响应式原理</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
-                
-                <a href="/blog/2018/08/26/%E6%B5%8F%E8%A7%88%E5%99%A8http%E7%BC%93%E5%AD%98/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeVu4g.png" alt="浏览器http缓存">
-                    </p>
-                </a>
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2018-08-25T16:58:35.000Z">2018-08-26</time>
-                        <a href="/blog/2018/08/26/%E6%B5%8F%E8%A7%88%E5%99%A8http%E7%BC%93%E5%AD%98/" class="title has-link-black-ter is-size-6 has-text-weight-normal">浏览器http缓存</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
-                
-                <a href="/blog/2018/08/14/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE%E2%80%94%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JavaScript%E4%B8%AD%E5%8D%B7/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeEvB6.png" alt="思维导图—你不知道的JavaScript中卷">
-                    </p>
-                </a>
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2018-08-13T16:48:26.000Z">2018-08-14</time>
-                        <a href="/blog/2018/08/14/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE%E2%80%94%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84JavaScript%E4%B8%AD%E5%8D%B7/" class="title has-link-black-ter is-size-6 has-text-weight-normal">思维导图—你不知道的JavaScript中卷</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
-                
-                <a href="/blog/2018/08/12/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E6%97%A5%E6%9C%9F%E9%80%89%E6%8B%A9%E5%99%A8%E6%8F%92%E4%BB%B6/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeA7QI.png" alt="原生js实现日期选择器插件">
-                    </p>
-                </a>
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2018-08-11T16:43:10.000Z">2018-08-12</time>
-                        <a href="/blog/2018/08/12/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E6%97%A5%E6%9C%9F%E9%80%89%E6%8B%A9%E5%99%A8%E6%8F%92%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">原生js实现日期选择器插件</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
-                
-                <a href="/blog/2018/08/02/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE%E2%80%94%E6%8F%8F%E8%BF%B0vue%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeiAGn.png" alt="思维导图—描述vue执行机制">
-                    </p>
-                </a>
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2018-08-01T16:39:47.000Z">2018-08-02</time>
-                        <a href="/blog/2018/08/02/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE%E2%80%94%E6%8F%8F%E8%BF%B0vue%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">思维导图—描述vue执行机制</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
-                
-                <a href="/blog/2018/04/26/%E5%8F%98%E9%87%8F%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GePM9I.png" alt="变量命名规范">
-                    </p>
-                </a>
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2018-04-25T16:33:40.000Z">2018-04-26</time>
-                        <a href="/blog/2018/04/26/%E5%8F%98%E9%87%8F%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/" class="title has-link-black-ter is-size-6 has-text-weight-normal">变量命名规范</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
-                
-                <a href="/blog/2018/03/11/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E6%8B%BE%E8%89%B2%E5%99%A8%E6%8F%92%E4%BB%B6/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GeCvBF.png" alt="原生js实现拾色器插件">
-                    </p>
-                </a>
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2018-03-10T16:30:20.000Z">2018-03-11</time>
-                        <a href="/blog/2018/03/11/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E6%8B%BE%E8%89%B2%E5%99%A8%E6%8F%92%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">原生js实现拾色器插件</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-            <article class="media">
-                
-                <a href="/blog/2018/02/25/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%89%E6%8B%A9%E5%99%A8%E6%8F%92%E4%BB%B6/" class="media-left">
-                    <p class="image is-64x64">
-                        <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/Ge95J1.png" alt="原生js实现移动端选择器插件">
-                    </p>
-                </a>
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2018-02-24T16:18:48.000Z">2018-02-25</time>
-                        <a href="/blog/2018/02/25/%E5%8E%9F%E7%94%9Fjs%E5%AE%9E%E7%8E%B0%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%80%89%E6%8B%A9%E5%99%A8%E6%8F%92%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">原生js实现移动端选择器插件</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
         </div>
     </div>
 </div>
 
 
 
-    
 <div class="card card-transparent">
-    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-        <div class="pagination-previous is-invisible is-hidden-mobile">
-            <a class="is-flex-grow has-text-black-ter" href="/blog/archives/2018/page/0/">上一页</a>
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/blog/2019/11/25/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BF%BB%E8%AF%91%E6%8F%92%E4%BB%B6/">
+                <span class="level-item">命令行翻译插件</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
         </div>
-        <div class="pagination-next">
-            <a class="is-flex-grow has-text-black-ter" href="/blog/archives/2018/page/2/">下一页</a>
-        </div>
-        <ul class="pagination-list is-hidden-mobile">
-            
-            <li><a class="pagination-link is-current" href="/blog/archives/2018/">1</a></li>
-            
-            <li><a class="pagination-link has-text-black-ter" href="/blog/archives/2018/page/2/">2</a></li>
-            
-        </ul>
-    </nav>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="valine-thread" class="content"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#valine-thread' ,
+        notify: false,
+        verify: false,
+        app_id: '6wph3PoS8fVVU86A0GoJPvbu-gzGzoHsz',
+        app_key: 'N6A70pqCwTUE03HESBBPHAIu',
+        placeholder: '请输入'
+    });
+</script>
+
+    </div>
 </div>
 </div>
                 
@@ -1410,7 +1337,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/blog/">
                 
-                    <img src="/blog/images/logo.svg" alt="atie&#39;s blog" height="28">
+                    <img src="/blog/images/logo.svg" alt="docker从零搭建jenkins" height="28">
                 
                 </a>
                 <p class="is-size-7">
