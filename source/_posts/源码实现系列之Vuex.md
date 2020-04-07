@@ -6,7 +6,7 @@ thumbnail: https://s1.ax1x.com/2020/04/03/Gt2PbQ.jpg
 categories: 前端
 ---
 
-这个月会实现一下`Vue`, `Vuex`, `vue-router`。我会以**倒推**的模式边开发边写文章。话不多说开始跟着我一起撸。
+这个月会实现一下`Vue`, `Vuex`, `vue-router`。我会以**倒推**的模式边开发边写文章。话不多说开始跟着我一起撸。[仓库地址](https://github.com/zhouatie/front-end/tree/master/realize-vuex)
 
 > 本文只是实现了一个非常基础版本的`vuex`，日后会进行升级。且本文所写的代码，不会每个地方都做异常判断，只满足我表达`vuex`的实现原理即可。
 
