@@ -300,13 +300,13 @@ server {
 ```
 
 我们先记录下未开启 gzip 时加载的文件大小
-![without-gzip](https://github.com/zhouatie/front-end/tree/master/note/nginx/data/without-gzip.png)
+![without-gzip](https://s1.ax1x.com/2020/05/05/YivuOs.png)
 
 size 显示的是 1.3kb
 
 然后我们将 gzip 注释去掉的结果如下
 
-![with-gzip](https://github.com/zhouatie/front-end/tree/master/note/nginx/data/without-gzip.png)
+![with-gzip](https://s1.ax1x.com/2020/05/05/YivMmn.png)
 
 可以看到只有 300B 了，当然你还可以根据其他配置，比如来控制压缩等级来控制输出的大小。我们前端项目打包的时候可以开启 gzip，这样 nginx 就不用在服务器上进行 gzip 压缩了。
 
