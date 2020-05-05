@@ -161,11 +161,11 @@ export default createMatcher;
 ```js
 // create-matcher.js
 function match(location) {
-    return routeMap[location]
+    return pathMap[location]
   }
 ```
 
-这个时候你肯定会有个疑惑，这个`routeMap`哪里来的呢？上面我已经说过`routeMap`是一个路由映射表。那就开始着手编码吧！
+这个时候你肯定会有个疑惑，这个`pathMap`哪里来的呢？上面我已经说过`pathMap`是一个路由映射表。那就开始着手编码吧！
 
 ```js
 // create-matcher.js
@@ -174,7 +174,7 @@ function createMatcher(routes) {
   function addRoute() {}
 
   function match(locaiton) {
-    return routeMap[locaiton];
+    return pathMap[locaiton];
   }
 
   return {
@@ -188,7 +188,7 @@ function createMatcher(routes) {
 
 ##### createRouteMap
 
-你可以看到代码中调用了`createRouteMap`，那么这个方法该怎么实现呢？首先我们已知这个方法是用来创建`routeMap`的，那么先搭一个大致的函数框架
+你可以看到代码中调用了`createRouteMap`，那么这个方法该怎么实现呢？首先我们已知这个方法是用来创建`pathMap`的，那么先搭一个大致的函数框架
 
 ```js
 // create-route-map.js
@@ -262,7 +262,7 @@ function addRouteRecord(route, pathList, pathMap, parent) {
 
 你会发现`addRouteRecord`多了个`parent`参数，是因为有子路由。给`record`增加`parent`属性是因为方便后面父子组件递归渲染。
 
-`match` 实现完了，就改实现下`addRoute`。那么`addRoute`又该怎么实现呢？其实非常的简单，就是给`pathList` `pathMap`增加`routes`对象罢了。那么我们就开始动手吧！
+`match` 实现完了，就该实现下`addRoute`。那么`addRoute`又该怎么实现呢？其实非常的简单，就是给`pathList` `pathMap`增加`routes`对象罢了。那么我们就开始动手吧！
 
 ```js
 // create-matcher.js
@@ -315,7 +315,11 @@ export default class HashHistory extends History {
 
 ### init
 
-`VueRouter`实例中的`init`方法是在什么时候调用呢？在`install`挂载的时候调用。那么我们再去完善下`install`方法
+#### init 哪里调用
+
+这个`init`会在哪里调用呢？当然是安装的时候调用。所以我们在`install`的时候加上`init`的调用。
+
+`init`为什么要传入根实例呢？因为需要监听当前`url`对应的路由变化。当他变化之后，会主动将根实例的`_route`赋值成当前的根路由。那根实例的`_route`哪来的呢？可能有人忘记了。可以翻到上面`install`的章节，那里讲过了。
 
 ```js
 // install.js
@@ -325,7 +329,7 @@ const install = (Vue) => {
       if (this.$options.router) {
         this._routerRoot = this;
         this._router = this.$options.router;
-        + this._router.init()
+        + this._router.init(this)
       } else {
         this._routerRoot = this.$parent && this.$parent._routerRoot;
       }
@@ -367,31 +371,11 @@ class VueRouter {
 
 ```
 
-#### init 哪里调用
-
-这个`init`会在哪里调用呢？当然是安装的时候调用。所以我们在`install`的时候加上`init`的调用。
-
-```js
-const install = (Vue) => {
-  Vue.mixin({
-    beforeCreate() {
-      if (this.$options.router) {
-        // ...
-        this._router.init(this)
-      } else {
-        // ...
-      }
-    },
-  });
-```
-
-`init`为什么要传入根实例呢？因为需要监听当前`url`对应的路由变化。当他变化之后，会主动将根实例的`_route`赋值成当前的根路由。那根实例的`_route`哪来的呢？可能有人忘记了。可以翻到上面`install`的章节，那里讲过了。
-
 #### init中做了哪些工作
 
 ##### transitionTo
 
-`init`中调用了`history`中的`transitionTo`,那么这个方法是干嘛的呢？用于路由的跳转，根据传入的`path`从`routeMap`中筛选出对应的`route`，这个方法会触发下面讲到的`listen`方法。这个方法触发后，会修改根实例的`_route`。修改之后，`router-view`就会响应式的改变，以达到刷新路由渲染页面的目的。因为调用`transitionTo`方法会有多种途径。一种是主动调用`push`方法等，需要主动修改`hash`值，一种是页面初始化调用，这个时候又需要监听`hashchange`等事件，所以`transitionTo`增加第二个参数用于回调。这样每个调用`transitionTo`后，可执行自己的逻辑。
+`init`中调用了`history`中的`transitionTo`,那么这个方法是干嘛的呢？用于路由的跳转，根据传入的`path`从`pathMap`中筛选出对应的`route`，这个方法会触发下面讲到的`listen`方法。这个方法触发后，会修改根实例的`_route`。修改之后，`router-view`就会响应式的改变，以达到刷新路由渲染页面的目的。因为调用`transitionTo`方法会有多种途径。一种是主动调用`push`方法等，需要主动修改浏览器地址栏`hash`值，一种是页面初始化调用，这个时候又需要监听`hashchange`等事件，所以`transitionTo`增加第二个参数用于回调。这样每个调用`transitionTo`后，可执行自己的逻辑。
 
 话不多说上代码
 
@@ -416,7 +400,7 @@ export default class History {
 - 怎么响应式刷新
 - 怎么实现匹配路由（`match`)
   
-我们先来讲**怎么响应式刷新**那么怎样才能实现`router-view`响应式的刷新呢？我们根据倒推的模式，`router-view`是根据根实例的`_route`做刷新的。所以需要增加个`current`对象用来表示当前路由。上代码🐶
+我们先来讲**怎么响应式刷新**。那么怎样才能实现`router-view`响应式的刷新呢？我们根据倒推的模式，`router-view`是根据根实例的`_route`做刷新的。所以需要增加个`current`对象用来表示当前路由。上代码🐶
 
 ```js
 // history/base.js
@@ -437,7 +421,7 @@ export default class History {
 }
 ```
 
-可是光设置`current`还不能实现`router-view`响应式刷新。因为`_route-view`是根据`$route`做响应式的。还记得在`install`的时候设置过`$route`吗？我们将它修改下。
+可是光设置`current`还不能实现`router-view`响应式刷新。因为`route-view`是根据`$route`做响应式的。还记得在`install`的时候设置过`$route`吗？我们将它修改下。
 
 ```js
 // install.js
@@ -624,7 +608,7 @@ export default class History {
 
 ### router-view
 
-在我看`router-view`源码之前，我根本`router-view`怎么实现。原来它是根据`$route`的`matched`匹配到的组件进行层层渲染的。
+在我看`router-view`源码之前，我根本不知道`router-view`怎么实现。原来它是根据`$route`的`matched`匹配到的组件进行层层渲染的。
 举个🌰，就举上面打印出来的`matched`来讲好了，`app.vue`中的`router-view`会渲染`matched`的第一项中的`component`对应的`about.vue`组件，`about.vue`中的`router-view`会渲染`matched`中第二个`component`对应的`about/a`组件。可能上代码更简单易懂🐶,那我就开始开发了（本文都是边开发边写文章的）。
 
 `router-view`组件是用的函数式组件，因为[函数式组件](https://cn.vuejs.org/v2/guide/render-function.html#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6)无状态 (没有响应式数据)，也没有实例 (没有 this 上下文)
@@ -690,7 +674,7 @@ export default {
 };
 ```
 
-`while`的作用判断是否渲染过，如果没有渲染过，就渲染对应matched里的组件，并将该组件data.routerView = 1。以达到不会重复渲染。刷新下页面看看吧。好像子页面都出来了。
+`while`的作用是判断是否渲染过，如果没有渲染过，就渲染对应matched里的组件，并将该组件data.routerView = 1。以达到不会重复渲染。刷新下页面看看吧。好像子页面都出来了。
 
 ### router-link
 
