@@ -2,7 +2,7 @@
 title: 源码实现系列之vue-router
 date: 2020-04-12 02:49:23
 tags: ['vue-router', '源码实现']
-thumbnail:
+thumbnail: https://s1.ax1x.com/2020/05/05/YijUdP.jpg
 categories: 前端
 ---
 
