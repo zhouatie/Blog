@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 4.2.0" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>源码实现系列之vue-router - atie&#39;s blog</title>
+
+
+    <meta name="description" content="这个月会实现一下Vue, Vuex, vue-router。我会以倒推的模式边开发边写文章。话不多说开始跟着我一起撸。仓库地址  本文只是实现了一个基础版本的vue-router.本文所写的代码，不会每个地方都做异常判断。实现一个能够体现vue-router核心逻辑即可。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="源码实现系列之vue-router">
+<meta property="og:url" content="http://zhouatie.github.io/blog/2020/04/12/%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E7%B3%BB%E5%88%97%E4%B9%8Bvue-router/index.html">
+<meta property="og:site_name" content="atie&#39;s blog">
+<meta property="og:description" content="这个月会实现一下Vue, Vuex, vue-router。我会以倒推的模式边开发边写文章。话不多说开始跟着我一起撸。仓库地址  本文只是实现了一个基础版本的vue-router.本文所写的代码，不会每个地方都做异常判断。实现一个能够体现vue-router核心逻辑即可。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zhouatie.github.io/blog/images/og_image.png">
+<meta property="article:published_time" content="2020-04-11T18:49:23.000Z">
+<meta property="article:modified_time" content="2020-05-05T07:57:27.827Z">
+<meta property="article:author" content="zhouatie">
+<meta property="article:tag" content="源码实现">
+<meta property="article:tag" content="vue-router">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zhouatie.github.io/blog/images/og_image.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/blog/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/blog/css/back-to-top.css">
+
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="/blog/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+<link rel="stylesheet" href="/blog/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/blog/">
+            
+                <img src="/blog/images/logo.svg" alt="源码实现系列之vue-router" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/blog/">主页</a>
+                
+                <a class="navbar-item"
+                href="/blog/archives">归档</a>
+                
+                <a class="navbar-item"
+                href="/blog/categories">分类</a>
+                
+                <a class="navbar-item"
+                href="/blog/tags">标签</a>
+                
+                <a class="navbar-item"
+                href="/blog/about">关于</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    <a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/zhouatie">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-04-11T18:49:23.000Z">2020-04-12</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    28 分钟 读完 (大约 4164 个字)
+                </span>
+                
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span>次访问
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                源码实现系列之vue-router
+            
+        </h1>
+        <div class="content">
+            <p>这个月会实现一下<code>Vue</code>, <code>Vuex</code>, <code>vue-router</code>。我会以<strong>倒推</strong>的模式边开发边写文章。话不多说开始跟着我一起撸。<a href="https://github.com/zhouatie/front-end/tree/master/analysis-vue-router">仓库地址</a></p>
+<blockquote>
+<p>本文只是实现了一个基础版本的<code>vue-router</code>.本文所写的代码，不会每个地方都做异常判断。实现一个能够体现<code>vue-router</code>核心逻辑即可。</p>
+</blockquote>
+<a id="more"></a>
+
+<p>我大致捋了下<code>vue-router</code>的流程图如下：<br><img src="https://s1.ax1x.com/2020/05/03/JxW5TS.png" alt="vue-router思维导图"></p>
+<p>在写源码之前，我先展示下<code>routes</code>的数据结构，在根据这个数据结构来进行<code>vue-router</code>的开发</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> routes = [</span><br><span class="line">  &#123;</span><br><span class="line">    path: <span class="string">'/'</span>,</span><br><span class="line">    name: <span class="string">'Home'</span>,</span><br><span class="line">    component: Home,</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    path: <span class="string">'/about'</span>,</span><br><span class="line">    name: <span class="string">'About'</span>,</span><br><span class="line">    component: <span class="function"><span class="params">()</span> =&gt;</span></span><br><span class="line">      <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: "about" */</span> <span class="string">'../views/About.vue'</span>),</span><br><span class="line">    children: [</span><br><span class="line">      &#123;</span><br><span class="line">        path: <span class="string">'a'</span>,</span><br><span class="line">        name: <span class="string">'about.a'</span>,</span><br><span class="line">        component: &#123;</span><br><span class="line">          render: <span class="function">(<span class="params">h</span>) =&gt;</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>this is a<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        path: <span class="string">'b'</span>,</span><br><span class="line">        name: <span class="string">'about.b'</span>,</span><br><span class="line">        component: &#123;</span><br><span class="line">          render: <span class="function">(<span class="params">h</span>) =&gt;</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>this is b<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装-install"><a href="#安装-install" class="headerlink" title="安装 install"></a>安装 install</h2><p>回忆下我们平时代码里用到<code>vue-router</code>必定会有的两行代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> VueRouter <span class="keyword">from</span> <span class="string">'vue-router'</span>;</span><br><span class="line"></span><br><span class="line">Vue.use(VueRouter);</span><br></pre></td></tr></table></figure>
+
+<p><code>Vue</code>在<code>use</code> <code>VueRouter</code>的时候会调用<code>VueRouter</code>的<code>install</code>方法，并传入<code>Vue</code>构造函数。</p>
+<p>所以我们接下来第一步就是创建一个<code>VueRouter</code>构造函数，并实现一个<code>install</code>方法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vue-router/index.js</span></span><br><span class="line"><span class="keyword">const</span> install = <span class="function">(<span class="params">Vue</span>) =&gt;</span> &#123;</span><br><span class="line">  Vue.mixin(&#123;</span><br><span class="line">    beforeCreate() &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.$options.router) &#123;</span><br><span class="line">        <span class="keyword">this</span>._routerRoot = <span class="keyword">this</span>;</span><br><span class="line">        <span class="keyword">this</span>._router = <span class="keyword">this</span>.$options.router;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>._routerRoot = <span class="keyword">this</span>.$parent &amp;&amp; <span class="keyword">this</span>.$parent._routerRoot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// <span class="doctag">FIXME:</span></span></span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(Vue.prototype, <span class="string">'$route'</span>, &#123;</span><br><span class="line">    <span class="keyword">get</span>() &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">'this is $route'</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(Vue.prototype, <span class="string">'$router'</span>, &#123;</span><br><span class="line">    <span class="keyword">get</span>() &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">this</span>._routerRoot._router;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// <span class="doctag">FIXME:</span></span></span><br><span class="line">  Vue.component(<span class="string">'router-view'</span>, &#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>this is router-view<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="comment">// <span class="doctag">FIXME:</span></span></span><br><span class="line">  Vue.component(<span class="string">'router-link'</span>, &#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>this is router-link<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> install;</span><br></pre></td></tr></table></figure>
+
+<p><code>vue-router</code>也会与<code>vuex</code>一样，通过<code>Vue.mixin</code>方法添加<code>beforeCreate</code>生命周期，通过在这个生命周期函数，向每个组件实例挂载<code>_routerRoot</code>根实例对象，根实例会多挂载一个<code>_router</code>对象，这样子组件就可以通过<code>_routerRoot._router</code>来获取路由实例对象了。同时会往<code>Vue.prototype</code>上挂载<code>$router</code> <code>$route</code>，方便每个子组件获取。</p>
+<p>并挂载全局组件<code>router-view</code>、<code>router-link</code>组件;</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>写完<code>install</code>方法后，我们接下来开始动手<code>VueRouter</code>。初始化时，该在<code>constructor</code>中写些什么呢？初始化当然是为了后续的一些方法做准备了。他将包含以下几点</p>
+<ul>
+<li>创建<code>matcher</code>对象<ul>
+<li><code>addRoute</code>: 用于动态添加路由</li>
+<li><code>match</code>: 重中之重，用于根据<code>path</code>匹配出对应的<code>route</code>对象，用于<code>router-view</code>的渲染</li>
+</ul>
+</li>
+<li>根据对应的<code>mode</code>创建对应的<code>history</code>对象（我这里开发的<code>router</code>默认使用<code>HashHistory</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VueRouter</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(options) &#123;</span><br><span class="line">    <span class="keyword">this</span>.matcher = createMatcher(options.routes);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.history = <span class="keyword">new</span> HashHistory();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  init() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="createMatcher"><a href="#createMatcher" class="headerlink" title="createMatcher"></a>createMatcher</h3><p>那么<code>createMatcher</code>到底该怎么实现？还是反推的模式，它肯定返回上面列的两个方法<code>addRoute</code> <code>match</code>方法。那么就先实现下大致的样子吧。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create-matcher.js</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createMatcher</span>(<span class="params">routes</span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">addRoute</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">match</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    addRoute,</span><br><span class="line">    match,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> createMatcher;</span><br></pre></td></tr></table></figure>
+
+<h4 id="match"><a href="#match" class="headerlink" title="match"></a>match</h4><p>接下来就是实现<code>match</code>方法了。前面说过<code>match</code>是用来匹配<code>path</code>所对应的<code>route</code>对象。所以他肯定有个<code>path</code>参数，然后通过一个路由映射表来筛选出对应的<code>route</code>对象。那就开始着手编码吧！</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create-matcher.js</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">match</span>(<span class="params">location</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> routeMap[location]</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个时候你肯定会有个疑惑，这个<code>routeMap</code>哪里来的呢？上面我已经说过<code>routeMap</code>是一个路由映射表。那就开始着手编码吧！</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create-matcher.js</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createMatcher</span>(<span class="params">routes</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; pathList, pathMap &#125; = createRouteMap(routes);</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">addRoute</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">match</span>(<span class="params">locaiton</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> routeMap[locaiton];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    addRoute,</span><br><span class="line">    match,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>match</code>方法中并不会那么简单的返回<code>route</code>对象就ok了。肯定是经过一个函数保证过返回<code>matched</code> <code>path</code>等字段。这里先忽略，等讲到<code>history</code>的时候再讲解。</p>
+<h5 id="createRouteMap"><a href="#createRouteMap" class="headerlink" title="createRouteMap"></a>createRouteMap</h5><p>你可以看到代码中调用了<code>createRouteMap</code>，那么这个方法该怎么实现呢？首先我们已知这个方法是用来创建<code>routeMap</code>的，那么先搭一个大致的函数框架</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create-route-map.js</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createRouteMap</span>(<span class="params">routes</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> pathList = [];</span><br><span class="line">  <span class="keyword">const</span> pathMap = <span class="built_in">Object</span>.create(<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    pathList,</span><br><span class="line">    pathMap,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> createRouteMap;</span><br></pre></td></tr></table></figure>
+
+<p>大致会是这个样子。执行返回路由映射表。那么该怎么创建<code>pathList</code> <code>pathMap</code>对象呢？当然用传入的<code>routes</code>来构造了。那就开始着手编码吧！</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create-route-map.js</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createRouteMap</span>(<span class="params">routes</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> pathList = [];</span><br><span class="line">  <span class="keyword">const</span> pathMap = <span class="built_in">Object</span>.create(<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">  routes.forEach(<span class="function"><span class="params">route</span> =&gt;</span> &#123;</span><br><span class="line">    addRouteRecord(route, pathList, pathMap)</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    pathList,</span><br><span class="line">    pathMap,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addRouteRecord</span> (<span class="params">route, pathList, pathMap</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> path = route.path</span><br><span class="line">  <span class="keyword">const</span> record = &#123;</span><br><span class="line">    path,</span><br><span class="line">    component: route.component</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (!pathList.includes(path)) &#123;</span><br><span class="line">    pathList.push(path)</span><br><span class="line">    pathMap[path] = record</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> createRouteMap;</span><br></pre></td></tr></table></figure>
+
+<p>上面我通过遍历<code>routes</code>，调用<code>addRouteRecord</code>方法，并传入<code>route</code>。<code>addRouteRecord</code>根据传入的<code>route</code>构建<code>pathList</code> <code>pathMap</code>，我想大家看代码应该就理解这段代码是什么意思了。当然上面只是非常非常基础版本的。还有一些场景没考虑到，比如传入的<code>route</code>对象还有<code>children</code>,就需要继续遍历他的<code>children</code>并调用<code>addRouteRecord</code>方法。那就开始着手编码吧！</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create-route-map.js</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addRouteRecord</span>(<span class="params">route, pathList, pathMap, parent</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> path = parent ? <span class="string">`<span class="subst">$&#123;parent.path&#125;</span>/<span class="subst">$&#123;route.path&#125;</span>`</span> : route.path;</span><br><span class="line">  <span class="keyword">const</span> record = &#123;</span><br><span class="line">    path,</span><br><span class="line">    component: route.component,</span><br><span class="line">    parent,</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">if</span> (!pathList.includes(path)) &#123;</span><br><span class="line">    pathList.push(path);</span><br><span class="line">    pathMap[path] = record;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (route.children) &#123;</span><br><span class="line">    route.children.forEach(<span class="function">(<span class="params">o</span>) =&gt;</span> &#123;</span><br><span class="line">      addRouteRecord(o, pathList, pathMap, record);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>你会发现<code>addRouteRecord</code>多了个<code>parent</code>参数，是因为有子路由。给<code>record</code>增加<code>parent</code>属性是因为方便后面父子组件递归渲染。</p>
+<p><code>match</code> 实现完了，就改实现下<code>addRoute</code>。那么<code>addRoute</code>又该怎么实现呢？其实非常的简单，就是给<code>pathList</code> <code>pathMap</code>增加<code>routes</code>对象罢了。那么我们就开始动手吧！</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create-matcher.js</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addRoute</span>(<span class="params">routes</span>) </span>&#123;</span><br><span class="line">  createRouteMap(routes, pathList, pathMap);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>你会发现这里的<code>createRouteMap</code>增加了2个参数，所以<code>createRouteMap</code>方法就需要去兼容了。那么我们就开始动手吧！</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create-route-map.js</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createRouteMap</span>(<span class="params">routes, oldPathList, oldPathMap</span>) </span>&#123;</span><br><span class="line">  - <span class="keyword">const</span> pathList = [];</span><br><span class="line">  + <span class="keyword">const</span> pathList = oldPathList || [];</span><br><span class="line">  - <span class="keyword">const</span> pathMap =<span class="built_in">Object</span>.create(<span class="literal">null</span>);</span><br><span class="line">  + <span class="keyword">const</span> pathMap = oldPathMap || <span class="built_in">Object</span>.create(<span class="literal">null</span>);</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>只需要对原先创建<code>pathList</code> <code>pathMap</code>对象进行兼容即可。</p>
+<h3 id="History"><a href="#History" class="headerlink" title="History"></a>History</h3><p><code>constructor</code>中的<code>matcher</code>对象创建讲完之后，接下来我们来讲讲<code>constructor</code>中的<code>HashHistory</code>。</p>
+<p><code>HashHistory</code>该怎么实现？<code>new HashHistory</code>后做了什么呢？</p>
+<p>因为<code>history</code>模式有多种，我们需要实现一个<code>base</code>版的<code>history</code>，然后<code>HashHistory</code>基于这个基类进行扩展。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// history/base.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">History</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> History <span class="keyword">from</span> <span class="string">'./base'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">HashHistory</span> <span class="keyword">extends</span> <span class="title">History</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(router) &#123;</span><br><span class="line">    <span class="keyword">super</span>(router);</span><br><span class="line">    <span class="keyword">this</span>.router = router;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="init"><a href="#init" class="headerlink" title="init"></a>init</h3><p><code>VueRouter</code>实例中的<code>init</code>方法是在什么时候调用呢？在<code>install</code>挂载的时候调用。那么我们再去完善下<code>install</code>方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// install.js</span></span><br><span class="line"><span class="keyword">const</span> install = <span class="function">(<span class="params">Vue</span>) =&gt;</span> &#123;</span><br><span class="line">  Vue.mixin(&#123;</span><br><span class="line">    beforeCreate() &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.$options.router) &#123;</span><br><span class="line">        <span class="keyword">this</span>._routerRoot = <span class="keyword">this</span>;</span><br><span class="line">        <span class="keyword">this</span>._router = <span class="keyword">this</span>.$options.router;</span><br><span class="line">        + <span class="keyword">this</span>._router.init()</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>._routerRoot = <span class="keyword">this</span>.$parent &amp;&amp; <span class="keyword">this</span>.$parent._routerRoot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>加号位置就是我添加的代码。调用下<code>init</code>初始化下<code>VueRouter</code></p>
+<p>那么<code>init</code>方法中做了哪些事情呢？</p>
+<ul>
+<li>挂载当前<code>url</code>对应的路由组件</li>
+<li>监听路由的变化（<code>hashchange</code>等事件）</li>
+</ul>
+<p>话不多说，进入编码模式</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vue-router/index.js</span></span><br><span class="line"><span class="keyword">import</span> HashHistory <span class="keyword">from</span> <span class="string">'./history/hash'</span>;</span><br><span class="line"><span class="keyword">import</span> install <span class="keyword">from</span> <span class="string">'./install'</span>;</span><br><span class="line"><span class="keyword">import</span> createMatcher <span class="keyword">from</span> <span class="string">'./create-matcher'</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VueRouter</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(options) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">  init(app) &#123;</span><br><span class="line">    <span class="keyword">const</span> history = <span class="keyword">this</span>.history;</span><br><span class="line">    <span class="keyword">const</span> setupListener = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      history.setupListener();</span><br><span class="line">    &#125;;</span><br><span class="line">    history.transitionTo(history.getCurrentLocation(), setupListener);</span><br><span class="line">    history.listen(<span class="function">(<span class="params">route</span>) =&gt;</span> &#123;</span><br><span class="line">      app._route = route;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="init-哪里调用"><a href="#init-哪里调用" class="headerlink" title="init 哪里调用"></a>init 哪里调用</h4><p>这个<code>init</code>会在哪里调用呢？当然是安装的时候调用。所以我们在<code>install</code>的时候加上<code>init</code>的调用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> install = <span class="function">(<span class="params">Vue</span>) =&gt;</span> &#123;</span><br><span class="line">  Vue.mixin(&#123;</span><br><span class="line">    beforeCreate() &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.$options.router) &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="keyword">this</span>._router.init(<span class="keyword">this</span>)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<p><code>init</code>为什么要传入根实例呢？因为需要监听当前<code>url</code>对应的路由变化。当他变化之后，会主动将根实例的<code>_route</code>赋值成当前的根路由。那根实例的<code>_route</code>哪来的呢？可能有人忘记了。可以翻到上面<code>install</code>的章节，那里讲过了。</p>
+<h4 id="init中做了哪些工作"><a href="#init中做了哪些工作" class="headerlink" title="init中做了哪些工作"></a>init中做了哪些工作</h4><h5 id="transitionTo"><a href="#transitionTo" class="headerlink" title="transitionTo"></a>transitionTo</h5><p><code>init</code>中调用了<code>history</code>中的<code>transitionTo</code>,那么这个方法是干嘛的呢？用于路由的跳转，根据传入的<code>path</code>从<code>routeMap</code>中筛选出对应的<code>route</code>，这个方法会触发下面讲到的<code>listen</code>方法。这个方法触发后，会修改根实例的<code>_route</code>。修改之后，<code>router-view</code>就会响应式的改变，以达到刷新路由渲染页面的目的。因为调用<code>transitionTo</code>方法会有多种途径。一种是主动调用<code>push</code>方法等，需要主动修改<code>hash</code>值，一种是页面初始化调用，这个时候又需要监听<code>hashchange</code>等事件，所以<code>transitionTo</code>增加第二个参数用于回调。这样每个调用<code>transitionTo</code>后，可执行自己的逻辑。</p>
+<p>话不多说上代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// history/base.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">History</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(router) &#123;</span><br><span class="line">    + <span class="keyword">this</span>.router = router</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  + transitionTo(location, callback) &#123;</span><br><span class="line">  +  <span class="keyword">const</span> r = <span class="keyword">this</span>.router.match(location)</span><br><span class="line">  +  <span class="built_in">console</span>.log(r)</span><br><span class="line">  +  callback &amp;&amp; callback()</span><br><span class="line">  + &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面简短的代码是不是就实现了上面描述中的几个功能了。<br>还有两点功能没实现。</p>
+<ul>
+<li>怎么响应式刷新</li>
+<li>怎么实现匹配路由（<code>match</code>)</li>
+</ul>
+<p>我们先来讲<strong>怎么响应式刷新</strong>那么怎样才能实现<code>router-view</code>响应式的刷新呢？我们根据倒推的模式，<code>router-view</code>是根据根实例的<code>_route</code>做刷新的。所以需要增加个<code>current</code>对象用来表示当前路由。上代码🐶</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// history/base.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">History</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(router) &#123;</span><br><span class="line">    <span class="keyword">this</span>.router = router</span><br><span class="line">    + <span class="keyword">this</span>.current = createRoute(<span class="literal">null</span>, &#123;</span><br><span class="line">    +  path: <span class="string">'/'</span></span><br><span class="line">    + &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  transitionTo(location, callback) &#123;</span><br><span class="line">    <span class="keyword">const</span> r = <span class="keyword">this</span>.router.match(location)</span><br><span class="line">    + <span class="keyword">this</span>.current = r</span><br><span class="line">    callback &amp;&amp; callback()</span><br><span class="line">    <span class="built_in">console</span>.log(r)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可是光设置<code>current</code>还不能实现<code>router-view</code>响应式刷新。因为<code>_route-view</code>是根据<code>$route</code>做响应式的。还记得在<code>install</code>的时候设置过<code>$route</code>吗？我们将它修改下。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// install.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> install = <span class="function">(<span class="params">Vue</span>) =&gt;</span> &#123;</span><br><span class="line">  Vue.mixin(&#123;</span><br><span class="line">    beforeCreate() &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.$options.router) &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="keyword">this</span>._router.init(<span class="keyword">this</span>)</span><br><span class="line">        + Vue.util.defineReactive(<span class="keyword">this</span>, <span class="string">'_route'</span>, <span class="keyword">this</span>._router.history.current);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>._routerRoot = <span class="keyword">this</span>.$parent &amp;&amp; <span class="keyword">this</span>.$parent._routerRoot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(Vue.prototype, <span class="string">'$route'</span>, &#123;</span><br><span class="line">    <span class="keyword">get</span>() &#123;</span><br><span class="line">      - <span class="keyword">return</span> <span class="string">'this is $route'</span>;</span><br><span class="line">      + <span class="keyword">return</span> <span class="keyword">this</span>._routerRoot._route;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样 我们一旦修改<code>current</code>，页面的<code>$route</code>就会响应式更新了。刷新下页面试试看吧🐶。</p>
+<p>竟然报错了。提示<code>createRoute is not defined</code>。</p>
+<p>抄下上面贴过的代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// history/base.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">History</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(router) &#123;</span><br><span class="line">    <span class="keyword">this</span>.router = router</span><br><span class="line">    + <span class="keyword">this</span>.current = createRoute(<span class="literal">null</span>, &#123;</span><br><span class="line">    +  path: <span class="string">'/'</span></span><br><span class="line">    + &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  transitionTo(location, callback) &#123;</span><br><span class="line">    <span class="keyword">const</span> r = <span class="keyword">this</span>.router.match(location)</span><br><span class="line">    + <span class="keyword">this</span>.current = r</span><br><span class="line">    callback &amp;&amp; callback()</span><br><span class="line">    <span class="built_in">console</span>.log(r)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们来讲讲<code>createRoute</code>的作用。他的作用是将匹配到的<code>route</code>进行处理，返回个包含<code>path</code>、<code>matched</code>字段。<code>matched</code>字段包含了，从匹配到的一级路由一直到最后一级路由。<code>router-view</code>也是根据这一数组进行父组件到子组件的渲染的。<code>match</code>方法中也用到的这个方法。下面再讲<code>match</code>方法。接下来我们就来实现<code>createRoute</code>方法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// history/base.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">createRoute</span>(<span class="params">record, location</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> matched = [];</span><br><span class="line">  <span class="keyword">while</span> (record) &#123;</span><br><span class="line">    matched.unshift(record);</span><br><span class="line">    record = record.parent;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    matched,</span><br><span class="line">    ...location,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个参数<code>record</code>其实就是上文<code>createRouteMap</code>中<code>addRouteRecord</code>使用到的<code>record</code>。其中包含了<code>parent</code>字段就是在这个时候用到的。所以<code>/about/a</code>就可以生成<code>matched: [{path: &#39;/about&#39;, component: componentAbout}, {path: &#39;/about/a&#39;, component: componentAboutA}]</code>了。再次提醒下，<code>matched</code>用于<code>router-view</code>的层层渲染。话不多说，上代码🐶</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vue-router/index.js</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VueRouter</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(options) &#123;</span><br><span class="line">    <span class="keyword">this</span>.matcher = createMatcher(options.routes);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  match(location) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.matcher.match(location);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>提醒下，这里的<code>matcher</code>上面讲过了。用来返回<code>match</code>跟<code>addRoute</code>方法。</p>
+<p>然后再完善下上面写过的<code>createMatcher</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create-matcher.js</span></span><br><span class="line">+ <span class="keyword">import</span> &#123; createRoute &#125; <span class="keyword">from</span> <span class="string">'./history/base'</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createMatcher</span>(<span class="params">routes</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; pathList, pathMap &#125; = createRouteMap(routes);</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">match</span>(<span class="params">locaiton</span>) </span>&#123;</span><br><span class="line">    - <span class="keyword">return</span> pathMap[locaiton];</span><br><span class="line">    + <span class="keyword">return</span> createRoute(pathMap[locaiton], &#123;</span><br><span class="line">    +   path: locaiton,</span><br><span class="line">    + &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看着好像没什么问题了，再刷新下页面。</p>
+<p>提示<code>history.setupListener is not a function</code></p>
+<p>我们再把思绪拉回到<code>init</code>方法中调用的<code>history.setupListener</code></p>
+<p><code>setupListener</code>其实非常的简单，就是添加监听事件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">HashHistory</span> <span class="keyword">extends</span> <span class="title">History</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(router) &#123;</span><br><span class="line">    <span class="keyword">super</span>(router);</span><br><span class="line">    <span class="keyword">this</span>.router = router;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getCurrentLocation() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">window</span>.location.hash.slice(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  + setupListener() &#123;</span><br><span class="line">  +   <span class="built_in">window</span>.addEventListener(<span class="string">'hashchange'</span>, () =&gt; &#123;</span><br><span class="line">  +     <span class="keyword">this</span>.transitionTo(<span class="keyword">this</span>.getCurrentLocation());</span><br><span class="line">  +   &#125;);</span><br><span class="line">  + &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>监听到<code>hashchange</code>后，主动调用下<code>transitionTo</code>去切换路由。</p>
+<p>然后我们再刷新下页面，又报错 excuse me？？？</p>
+<p>提示: <code>TypeError: history.listen is not a function</code></p>
+<h5 id="listen"><a href="#listen" class="headerlink" title="listen"></a>listen</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VueRouter</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(options) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">this</span>.history = <span class="keyword">new</span> HashHistory(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  init(app) &#123;</span><br><span class="line">    <span class="keyword">const</span> history = <span class="keyword">this</span>.history;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    history.transitionTo(history.getCurrentLocation(), setupListener);</span><br><span class="line">    &gt; history.listen(<span class="function">(<span class="params">route</span>) =&gt;</span> &#123;</span><br><span class="line">    &gt;   app._route = route;</span><br><span class="line">    &gt; &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>init</code>中<code>history.listen</code>其实也是非常的简单，就是添加订阅。当调用<code>transitionTo</code>后，触发下订阅的事件。并传入<code>location</code>对应的<code>route</code>。话不多说，上代码🐶</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// history/base.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">History</span> </span>&#123;</span><br><span class="line">  transitionTo(location, callback) &#123;</span><br><span class="line">    <span class="keyword">const</span> r = <span class="keyword">this</span>.router.match(location);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">this</span>.cb &amp;&amp; <span class="keyword">this</span>.cb(r)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  listen(cb) &#123;</span><br><span class="line">    <span class="keyword">this</span>.cb</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个时候再刷新下页面。打印下<code>.vue</code>文件里的<code>this.$route</code>看了下好像没问题😆。</p>
+<p>上文说过<code>router-view</code>是根据<code>$route</code>层层渲染的，既然<code>$route</code>都冇问题了，那就开始编写<code>router-view</code>组件吧。</p>
+<h3 id="router-view"><a href="#router-view" class="headerlink" title="router-view"></a>router-view</h3><p>在我看<code>router-view</code>源码之前，我根本<code>router-view</code>怎么实现。原来它是根据<code>$route</code>的<code>matched</code>匹配到的组件进行层层渲染的。<br>举个🌰，就举上面打印出来的<code>matched</code>来讲好了，<code>app.vue</code>中的<code>router-view</code>会渲染<code>matched</code>的第一项中的<code>component</code>对应的<code>about.vue</code>组件，<code>about.vue</code>中的<code>router-view</code>会渲染<code>matched</code>中第二个<code>component</code>对应的<code>about/a</code>组件。可能上代码更简单易懂🐶,那我就开始开发了（本文都是边开发边写文章的）。</p>
+<p><code>router-view</code>组件是用的函数式组件，因为<a href="https://cn.vuejs.org/v2/guide/render-function.html#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6">函数式组件</a>无状态 (没有响应式数据)，也没有实例 (没有 this 上下文)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// components/router-view.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  functional: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">  render(h, &#123;parent, data&#125;) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(parent, <span class="string">'parent'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改<code>install</code>中<code>rotuer-view</code>组件定义。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// install.js</span></span><br><span class="line"><span class="keyword">import</span> RouterView <span class="keyword">from</span> <span class="string">'./components/router-view'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> install = <span class="function">(<span class="params">Vue</span>) =&gt;</span> &#123;</span><br><span class="line">  - Vue.component(<span class="string">'router-view'</span>, &#123;</span><br><span class="line">  -   render() &#123;</span><br><span class="line">  -     <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>this is router-view<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">  -   &#125;,</span><br><span class="line">  - &#125;);</span><br><span class="line">  + Vue.component(<span class="string">'router-view'</span>, RouterView);</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> install;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码写完之后，好像一切正常，打印出来也是正常的。接下来就根据我上面说的，他是根据<code>$route.matched</code>来渲染的去实现它吧。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  functional: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">  render(h, &#123; parent, data &#125;) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(parent, <span class="string">'parent'</span>);</span><br><span class="line">    <span class="keyword">const</span> route = parent.$route;</span><br><span class="line">    <span class="keyword">let</span> depth = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 判断是否渲染过，如果没有渲染过，就渲染对应matched里的组件，并将该组件data.routerView = 1。以达到不会重复渲染。</span></span><br><span class="line">    <span class="keyword">while</span> (parent) &#123;</span><br><span class="line">      <span class="keyword">if</span> (parent.$vnode &amp;&amp; parent.$vnode.data.routerView) &#123;</span><br><span class="line">        depth++;</span><br><span class="line">      &#125;</span><br><span class="line">      parent = parent.$parent;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    data.routerView = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> record = route.matched[depth];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!record) &#123;</span><br><span class="line">      <span class="keyword">return</span> h();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> h(record.component, data);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><code>while</code>的作用判断是否渲染过，如果没有渲染过，就渲染对应matched里的组件，并将该组件data.routerView = 1。以达到不会重复渲染。刷新下页面看看吧。好像子页面都出来了。</p>
+<h3 id="router-link"><a href="#router-link" class="headerlink" title="router-link"></a>router-link</h3><p><code>router-link</code>非常的简单。我这里就实现下比较常见的一些操作。比如参数<code>tag</code>,<code>to</code>等</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  props: &#123;</span><br><span class="line">    tag: &#123;</span><br><span class="line">      type: <span class="built_in">String</span>,</span><br><span class="line">      <span class="keyword">default</span>: <span class="string">'a'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> tag = <span class="keyword">this</span>.tag;</span><br><span class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">tag</span>&gt;</span>&#123;this.$slots.default&#125;<span class="tag">&lt;/<span class="name">tag</span>&gt;</span></span>;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>我这里先写个比较简单的架子。非常的简单将文字展示在<code>tag</code>中</p>
+<p>然后再修改下<code>install</code>中的引入</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// install.js</span></span><br><span class="line"><span class="keyword">import</span> RouterLink <span class="keyword">from</span> <span class="string">'./components/router-link'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> install = <span class="function">(<span class="params">Vue</span>) =&gt;</span> &#123;</span><br><span class="line">  - Vue.component(<span class="string">'router-link'</span>, &#123;</span><br><span class="line">  -   render() &#123;</span><br><span class="line">  -     <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>this is router-link<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">  -   &#125;,</span><br><span class="line">  - &#125;);</span><br><span class="line">  + Vue.component(<span class="string">'router-link'</span>, RouterLink);</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> install;</span><br></pre></td></tr></table></figure>
+
+<p>刷新下页面试试。页面一切展示正常🐶。这就大功告成了吗？当然没有啦，还有<code>router-link</code>的点击事件没写，那就开始动手吧。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// router-link.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  props: &#123;</span><br><span class="line">    tag: &#123;</span><br><span class="line">      type: <span class="built_in">String</span>,</span><br><span class="line">      <span class="keyword">default</span>: <span class="string">'a'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    + to: &#123;</span><br><span class="line">    +   type: <span class="built_in">String</span>,</span><br><span class="line">    +   required: <span class="literal">true</span>,</span><br><span class="line">    + &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  + methods: &#123;</span><br><span class="line">  +   handler() &#123;</span><br><span class="line">  +     <span class="keyword">this</span>.$router.push(<span class="keyword">this</span>.to);</span><br><span class="line">  +   &#125;,</span><br><span class="line">  + &#125;,</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> tag = <span class="keyword">this</span>.tag;</span><br><span class="line">    - <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">tag</span>&gt;</span>&#123;this.$slots.default&#125;<span class="tag">&lt;/<span class="name">tag</span>&gt;</span></span>;</span><br><span class="line">    + <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">tag</span> <span class="attr">onClick</span>=<span class="string">&#123;this.handler&#125;</span>&gt;</span>&#123;this.$slots.default&#125;<span class="tag">&lt;/<span class="name">tag</span>&gt;</span></span>;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>给<code>tag</code>增加点击事件。我上面的例子将<code>to</code>定义成<code>String</code>类型了。其实这个<code>to</code>可以是对象类型。我的例子只要能体现出<code>router-link</code>的功能就行了。</p>
+<p>接下来刷新下页面试试看。</p>
+<p>报了个错: <code>TypeError: this.$router.push is not a function</code></p>
+<p>原来我<code>push</code>忘记写了。那就在<code>vue-router</code>实例中加一个吧。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vue-router/index.js</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VueRouter</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(options) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">this</span>.history = <span class="keyword">new</span> HashHistory(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  + push(location) &#123;</span><br><span class="line">  +   <span class="keyword">this</span>.history.transitionTo(location, () =&gt; &#123;</span><br><span class="line">  +     <span class="built_in">window</span>.location.hash = location;</span><br><span class="line">  +   &#125;);</span><br><span class="line">  + &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用下<code>history.transitionTo</code>进行路由的匹配替换，触发<code>router-view</code>渲染后，还有在回调中主动修改下<code>hash</code>地址。</p>
+<p>刷新下页面。一切正常。再点击<code>router-link</code>标签。emmmm 一切正常。（重复点击一个link跳转没有处理，我就不处理。我觉得没有必要，我的目的就是能表达我对router的理解就够了）</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>非常感谢你能读完这篇文章。我已经非常努力写这篇文章了（vue-router写了三遍才开始写文章的）。但是读起来好像还是不是很顺。</p>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/blog/tags/vue-router/" rel="tag">vue-router</a>, <a class="has-link-grey -link" href="/blog/tags/%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0/" rel="tag">源码实现</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="https://s1.ax1x.com/2020/03/29/GVxai6.png" alt="支付宝"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="https://s1.ax1x.com/2020/03/29/GVzAfK.png" alt="微信"></div>
+</a>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/blog/2020/04/02/%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E7%B3%BB%E5%88%97%E4%B9%8BVuex/">
+                <span class="level-item">源码实现系列之Vuex</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<div id="valine-thread" class="content"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#valine-thread' ,
+        notify: false,
+        verify: false,
+        app_id: '6wph3PoS8fVVU86A0GoJPvbu-gzGzoHsz',
+        app_key: 'N6A70pqCwTUE03HESBBPHAIu',
+        placeholder: '请输入'
+    });
+</script>
+
+    </div>
+</div>
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                    <figure class="image is-128x128 has-mb-6">
+                        <img class="" src="/blog/images/avatar.png" alt="zhouatie">
+                    </figure>
+                    
+                    <p class="is-size-4 is-block">
+                        zhouatie
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        记录点滴
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>杭州</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <a href="/blog/archives">
+                        <p class="title has-text-weight-normal">
+                            29
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <a href="/blog/categories">
+                        <p class="title has-text-weight-normal">
+                            3
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <a href="/blog/tags">
+                        <p class="title has-text-weight-normal">
+                            19
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/zhouatie" target="_blank" rel="noopener">
+                关注我</a>
+        </div>
+        
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Github" href="https://github.com/zhouatie">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            链接
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://hexo.io" target="_blank" rel="noopener">
+                    <span class="level-left">
+                        <span class="level-item">Hexo</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">hexo.io</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/zhouatie" target="_blank" rel="noopener">
+                    <span class="level-left">
+                        <span class="level-item">zhouatie</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/blog/categories/%E5%89%8D%E7%AB%AF/">
+            <span class="level-start">
+                <span class="level-item">前端</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">27</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/blog/categories/%E5%B7%A5%E5%85%B7/">
+            <span class="level-start">
+                <span class="level-item">工具</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/blog/categories/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/">
+            <span class="level-start">
+                <span class="level-item">持续集成</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/blog/tags/cache/" style="font-size: 10px;">cache</a> <a href="/blog/tags/docker/" style="font-size: 15px;">docker</a> <a href="/blog/tags/fanyi/" style="font-size: 10px;">fanyi</a> <a href="/blog/tags/formdata/" style="font-size: 10px;">formdata</a> <a href="/blog/tags/http/" style="font-size: 10px;">http</a> <a href="/blog/tags/image-preview/" style="font-size: 10px;">image-preview</a> <a href="/blog/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/blog/tags/js/" style="font-size: 20px;">js</a> <a href="/blog/tags/nginx/" style="font-size: 12.5px;">nginx</a> <a href="/blog/tags/node/" style="font-size: 12.5px;">node</a> <a href="/blog/tags/plugin/" style="font-size: 20px;">plugin</a> <a href="/blog/tags/promise/" style="font-size: 10px;">promise</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/socket-io/" style="font-size: 10px;">socket.io</a> <a href="/blog/tags/vue/" style="font-size: 15px;">vue</a> <a href="/blog/tags/vue-router/" style="font-size: 10px;">vue-router</a> <a href="/blog/tags/vuex/" style="font-size: 10px;">vuex</a> <a href="/blog/tags/webpack/" style="font-size: 17.5px;">webpack</a> <a href="/blog/tags/%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0/" style="font-size: 12.5px;">源码实现</a>
+    </div>
+</div>
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/blog/2020/04/12/%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E7%B3%BB%E5%88%97%E4%B9%8Bvue-router/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/blog/images/thumbnail.svg" alt="源码实现系列之vue-router">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-04-11T18:49:23.000Z">2020-04-12</time></div>
+                    <a href="/blog/2020/04/12/%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E7%B3%BB%E5%88%97%E4%B9%8Bvue-router/" class="title has-link-black-ter is-size-6 has-text-weight-normal">源码实现系列之vue-router</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2020/04/02/%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E7%B3%BB%E5%88%97%E4%B9%8BVuex/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/04/03/Gt2PbQ.jpg" alt="源码实现系列之Vuex">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-04-02T15:45:02.000Z">2020-04-02</time></div>
+                    <a href="/blog/2020/04/02/%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E7%B3%BB%E5%88%97%E4%B9%8BVuex/" class="title has-link-black-ter is-size-6 has-text-weight-normal">源码实现系列之Vuex</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2020/04/02/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BAjenkins/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/04/02/GGPu79.jpg" alt="docker从零搭建jenkins">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-04-01T20:16:41.000Z">2020-04-02</time></div>
+                    <a href="/blog/2020/04/02/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BAjenkins/" class="title has-link-black-ter is-size-6 has-text-weight-normal">docker从零搭建jenkins</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/">持续集成</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/11/25/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BF%BB%E8%AF%91%E6%8F%92%E4%BB%B6/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GelXJP.png" alt="命令行翻译插件">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-24T17:55:49.000Z">2019-11-25</time></div>
+                    <a href="/blog/2019/11/25/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BF%BB%E8%AF%91%E6%8F%92%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">命令行翻译插件</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/09/12/%E6%89%8B%E5%86%99Promise/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/Gelose.png" alt="手写Promise">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-11T17:54:02.000Z">2019-09-12</time></div>
+                    <a href="/blog/2019/09/12/%E6%89%8B%E5%86%99Promise/" class="title has-link-black-ter is-size-6 has-text-weight-normal">手写Promise</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2020/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/cache/">
+                        <span class="tag">cache</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/docker/">
+                        <span class="tag">docker</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/fanyi/">
+                        <span class="tag">fanyi</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/formdata/">
+                        <span class="tag">formdata</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/http/">
+                        <span class="tag">http</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/image-preview/">
+                        <span class="tag">image-preview</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/jenkins/">
+                        <span class="tag">jenkins</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/js/">
+                        <span class="tag">js</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/nginx/">
+                        <span class="tag">nginx</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/node/">
+                        <span class="tag">node</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/plugin/">
+                        <span class="tag">plugin</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/promise/">
+                        <span class="tag">promise</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/react/">
+                        <span class="tag">react</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/socket-io/">
+                        <span class="tag">socket.io</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/vue/">
+                        <span class="tag">vue</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/vue-router/">
+                        <span class="tag">vue-router</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/vuex/">
+                        <span class="tag">vuex</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/webpack/">
+                        <span class="tag">webpack</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0/">
+                        <span class="tag">源码实现</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/blog/2020/04/12/%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E7%B3%BB%E5%88%97%E4%B9%8Bvue-router/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/blog/images/thumbnail.svg" alt="源码实现系列之vue-router">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-04-11T18:49:23.000Z">2020-04-12</time></div>
+                    <a href="/blog/2020/04/12/%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E7%B3%BB%E5%88%97%E4%B9%8Bvue-router/" class="title has-link-black-ter is-size-6 has-text-weight-normal">源码实现系列之vue-router</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2020/04/02/%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E7%B3%BB%E5%88%97%E4%B9%8BVuex/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/04/03/Gt2PbQ.jpg" alt="源码实现系列之Vuex">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-04-02T15:45:02.000Z">2020-04-02</time></div>
+                    <a href="/blog/2020/04/02/%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E7%B3%BB%E5%88%97%E4%B9%8BVuex/" class="title has-link-black-ter is-size-6 has-text-weight-normal">源码实现系列之Vuex</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2020/04/02/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BAjenkins/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/04/02/GGPu79.jpg" alt="docker从零搭建jenkins">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-04-01T20:16:41.000Z">2020-04-02</time></div>
+                    <a href="/blog/2020/04/02/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BAjenkins/" class="title has-link-black-ter is-size-6 has-text-weight-normal">docker从零搭建jenkins</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/">持续集成</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/11/25/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BF%BB%E8%AF%91%E6%8F%92%E4%BB%B6/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GelXJP.png" alt="命令行翻译插件">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-24T17:55:49.000Z">2019-11-25</time></div>
+                    <a href="/blog/2019/11/25/%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BF%BB%E8%AF%91%E6%8F%92%E4%BB%B6/" class="title has-link-black-ter is-size-6 has-text-weight-normal">命令行翻译插件</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/blog/2019/09/12/%E6%89%8B%E5%86%99Promise/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/Gelose.png" alt="手写Promise">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-11T17:54:02.000Z">2019-09-12</time></div>
+                    <a href="/blog/2019/09/12/%E6%89%8B%E5%86%99Promise/" class="title has-link-black-ter is-size-6 has-text-weight-normal">手写Promise</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2020/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2019/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/blog/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/cache/">
+                        <span class="tag">cache</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/docker/">
+                        <span class="tag">docker</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/fanyi/">
+                        <span class="tag">fanyi</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/formdata/">
+                        <span class="tag">formdata</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/http/">
+                        <span class="tag">http</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/image-preview/">
+                        <span class="tag">image-preview</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/jenkins/">
+                        <span class="tag">jenkins</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/js/">
+                        <span class="tag">js</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/nginx/">
+                        <span class="tag">nginx</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/node/">
+                        <span class="tag">node</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/plugin/">
+                        <span class="tag">plugin</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/promise/">
+                        <span class="tag">promise</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/react/">
+                        <span class="tag">react</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/socket-io/">
+                        <span class="tag">socket.io</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/vue/">
+                        <span class="tag">vue</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/vue-router/">
+                        <span class="tag">vue-router</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/vuex/">
+                        <span class="tag">vuex</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/webpack/">
+                        <span class="tag">webpack</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/blog/tags/%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0/">
+                        <span class="tag">源码实现</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/blog/">
+                
+                    <img src="/blog/images/logo.svg" alt="源码实现系列之vue-router" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 zhouatie&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a>
+                
+                <br>
+                <span id="busuanzi_container_site_uv">
+                共<span id="busuanzi_value_site_uv">0</span>个访客
+                </span>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/zhouatie">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+<script>
+var IcarusThemeSettings = {
+    site: {
+        url: 'http://zhouatie.github.io/blog',
+        external_link: {"enable":true,"exclude":[]}
+    },
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+
+
+<script src="/blog/js/animation.js"></script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/blog/js/gallery.js" defer></script>
+
+
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/blog/js/back-to-top.js" defer></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/blog/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/blog/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/blog/js/insight.js" defer></script>
+<link rel="stylesheet" href="/blog/css/search.css">
+<link rel="stylesheet" href="/blog/css/insight.css">
+    
+</body>
+</html>
