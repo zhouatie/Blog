@@ -7,23 +7,20 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>配置nginx解决vue路由history模式下刷新404问题 - atie&#39;s blog</title>
+<title>归档: 2020/7 - atie&#39;s blog</title>
 
 
-    <meta name="description" content="在 vue 路由模式为 history 的时候，刷新页面会出现 404 问题。我们只需要在服务器配置如果 URL 匹配不到任何静态资源，就跳转到默认的 index.html。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="配置nginx解决vue路由history模式下刷新404问题">
-<meta property="og:url" content="http://zhouatie.github.io/blog/2018/09/11/%E9%85%8D%E7%BD%AEnginx%E8%A7%A3%E5%86%B3vue%E8%B7%AF%E7%94%B1history%E6%A8%A1%E5%BC%8F%E4%B8%8B%E5%88%B7%E6%96%B0404%E9%97%AE%E9%A2%98/index.html">
+    <meta name="description" content="about my front-end and my life">
+<meta property="og:type" content="website">
+<meta property="og:title" content="atie&#39;s blog">
+<meta property="og:url" content="http://zhouatie.github.io/blog/archives/2020/07/index.html">
 <meta property="og:site_name" content="atie&#39;s blog">
-<meta property="og:description" content="在 vue 路由模式为 history 的时候，刷新页面会出现 404 问题。我们只需要在服务器配置如果 URL 匹配不到任何静态资源，就跳转到默认的 index.html。">
+<meta property="og:description" content="about my front-end and my life">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s1.ax1x.com/2020/03/30/GemqIK.png">
-<meta property="article:published_time" content="2018-09-10T17:08:44.000Z">
-<meta property="article:modified_time" content="2020-03-29T18:31:02.336Z">
+<meta property="og:image" content="http://zhouatie.github.io/blog/images/og_image.png">
 <meta property="article:author" content="zhouatie">
-<meta property="article:tag" content="nginx">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s1.ax1x.com/2020/03/30/GemqIK.png">
+<meta name="twitter:image" content="http://zhouatie.github.io/blog/images/og_image.png">
 
 
 
@@ -81,7 +78,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/blog/">
             
-                <img src="/blog/images/logo.svg" alt="配置nginx解决vue路由history模式下刷新404问题" height="28">
+                <img src="/blog/images/logo.svg" alt="atie&#39;s blog" height="28">
             
             </a>
         </div>
@@ -131,143 +128,44 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
-<div class="card">
-    
-    <div class="card-image">
-        <span  class="image is-7by1">
-            <img class="thumbnail" src="https://s1.ax1x.com/2020/03/30/GemqIK.png" alt="配置nginx解决vue路由history模式下刷新404问题">
-        </span>
-    </div>
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2018-09-10T17:08:44.000Z">2018-09-11</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    几秒 读完 (大约 99 个字)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span>次访问
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                配置nginx解决vue路由history模式下刷新404问题
-            
-        </h1>
-        <div class="content">
-            <p>在 vue 路由模式为 history 的时候，刷新页面会出现 404 问题。我们只需要在服务器配置如果 URL 匹配不到任何静态资源，就跳转到默认的 index.html。</p>
-<a id="more"></a>
 
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">        listen <span class="number">8105</span>; <span class="comment">// 表示你nginx监听的端口号</span></span><br><span class="line">        root /home/admin/sites/vue-nginx/dist; <span class="comment">// vue打包后的文件夹dist目录</span></span><br><span class="line">        index index.html;</span><br><span class="line">        location / &#123;</span><br><span class="line">                 try_files $uri $uri/ <span class="regexp">/index.html;</span></span><br><span class="line"><span class="regexp">        &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
-
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/blog/tags/nginx/" rel="tag">nginx</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-<div class="card">
+<div class="card widget">
     <div class="card-content">
-        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
-        <div class="buttons is-centered">
-            
+        <h3 class="tag is-link">
+        七月 2020
+        </h3>
+        <div class="timeline">
+        
+            <article class="media">
                 
-<a class="button is-info donate">
-    <span class="icon is-small">
-        <i class="fab fa-alipay"></i>
-    </span>
-    <span>支付宝</span>
-    <div class="qrcode"><img src="https://s1.ax1x.com/2020/03/29/GVxai6.png" alt="支付宝"></div>
-</a>
-
+                <a href="/blog/2020/07/06/%E5%B8%A6%E4%BD%A0%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AAKoa/" class="media-left">
+                    <p class="image is-64x64">
+                        <img class="thumbnail" src="https://s1.ax1x.com/2020/07/19/U2fpV0.jpg" alt="带你手写一个Koa">
+                    </p>
+                </a>
                 
-                
-<a class="button is-success donate">
-    <span class="icon is-small">
-        <i class="fab fa-weixin"></i>
-    </span>
-    <span>微信</span>
-    <div class="qrcode"><img src="https://s1.ax1x.com/2020/03/29/GVzAfK.png" alt="微信"></div>
-</a>
-
-                
+                <div class="media-content">
+                    <div class="content">
+                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2020-07-06T13:11:47.000Z">2020-07-06</time>
+                        <a href="/blog/2020/07/06/%E5%B8%A6%E4%BD%A0%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AAKoa/" class="title has-link-black-ter is-size-6 has-text-weight-normal">带你手写一个Koa</a>
+                        <div class="level article-meta is-mobile">
+                            <div class="level-left">
+                                
+                                <div class="level-item is-size-7 is-uppercase">
+                                <a class="has-link-grey -link" href="/blog/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        
         </div>
     </div>
 </div>
 
 
-
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/blog/2018/11/12/%E9%98%BB%E6%AD%A2%E4%B8%AD%E6%96%87%E8%BE%93%E5%85%A5%E6%B3%95%E8%BE%93%E5%85%A5%E6%8B%BC%E9%9F%B3%E7%9A%84%E6%97%B6%E5%80%99%E8%A7%A6%E5%8F%91input%E4%BA%8B%E4%BB%B6/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">阻止中文输入法输入拼音的时候触发input事件</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/blog/2018/09/10/vue%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/">
-                <span class="level-item">vue响应式原理</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
-
-
-
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">评论</h3>
-        
-<div id="valine-thread" class="content"></div>
-<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js"></script>
-<script>
-    new Valine({
-        el: '#valine-thread' ,
-        notify: false,
-        verify: false,
-        app_id: '6wph3PoS8fVVU86A0GoJPvbu-gzGzoHsz',
-        app_key: 'N6A70pqCwTUE03HESBBPHAIu',
-        placeholder: '请输入'
-    });
-</script>
-
-    </div>
-</div>
 </div>
                 
 
@@ -1346,7 +1244,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/blog/">
                 
-                    <img src="/blog/images/logo.svg" alt="配置nginx解决vue路由history模式下刷新404问题" height="28">
+                    <img src="/blog/images/logo.svg" alt="atie&#39;s blog" height="28">
                 
                 </a>
                 <p class="is-size-7">
