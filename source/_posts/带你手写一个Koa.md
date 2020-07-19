@@ -23,7 +23,7 @@ Koa 是一个新的 web 框架，由 Express 幕后的原班人马打造， 致�
 2. 属性（request、response、上下文 `context`）
 3. 洋葱模型
 
-会举四个例子来实现koa，参考我的例子仓库。
+会举四个例子来实现koa，参考我的[例子仓库](https://github.com/zhouatie/front-end/tree/master/koa-analysis/koa-share)。
 
 ```js
 .
