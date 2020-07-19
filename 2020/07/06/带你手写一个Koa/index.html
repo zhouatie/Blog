@@ -19,7 +19,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s1.ax1x.com/2020/07/19/U2fpV0.jpg">
 <meta property="article:published_time" content="2020-07-06T13:11:47.000Z">
-<meta property="article:modified_time" content="2020-07-18T16:56:11.841Z">
+<meta property="article:modified_time" content="2020-07-19T14:55:11.430Z">
 <meta property="article:author" content="zhouatie">
 <meta property="article:tag" content="源码实现">
 <meta property="article:tag" content="koa">
@@ -154,7 +154,7 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    14 分钟 读完 (大约 2137 个字)
+                    14 分钟 读完 (大约 2149 个字)
                 </span>
                 
                 
@@ -185,7 +185,7 @@
 <li>属性（request、response、上下文 <code>context</code>）</li>
 <li>洋葱模型</li>
 </ol>
-<p>会举四个例子来实现koa，参考我的例子仓库。</p>
+<p>会举四个例子来实现koa，参考我的<a href="https://github.com/zhouatie/front-end/tree/master/koa-analysis/koa-share">例子仓库</a>。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── example</span><br><span class="line">│   ├── <span class="number">1.</span>index.js <span class="comment">// 用来泡基础用法</span></span><br><span class="line">│   ├── <span class="number">2.</span>index.js <span class="comment">// 用来介绍属性与扩展属性、上下文context、洋葱</span></span><br><span class="line">│   ├── <span class="number">3.</span>index.js <span class="comment">// 洋葱模型、中间件</span></span><br><span class="line">│   ├── <span class="number">4.</span>index.js <span class="comment">// 中间件例子实现</span></span><br><span class="line">│   ├── bodyparser.js</span><br><span class="line">│   └── public</span><br><span class="line">│       └── index.html</span><br><span class="line">├── lib</span><br><span class="line">│   ├── application.js</span><br><span class="line">│   ├── context.js</span><br><span class="line">│   ├── request.js</span><br><span class="line">│   └── response.js</span><br><span class="line">├── package-lock.json</span><br><span class="line">└── package.json</span><br></pre></td></tr></table></figure>
 
 <h2 id="3-基础用法"><a href="#3-基础用法" class="headerlink" title="3. 基础用法"></a>3. 基础用法</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// koa的核心功能就是创建一个服务，没了</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> Koa = <span class="built_in">require</span>(<span class="string">'koa'</span>);</span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa();</span><br><span class="line"></span><br><span class="line">app.use(<span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="string">'hello world'</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3000</span>);</span><br></pre></td></tr></table></figure>
